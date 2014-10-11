@@ -65,6 +65,14 @@ Tokenizer::Tokenizer(std::string input) {
     if(i < input.length() - 1) continue;
     
   acceptToken:
+    if(memory->text == "^" && !tokens.empty()) {
+      for(auto rit = tokens.rbegin(); rit != tokens.rend(); ++rit)
+        if((*rit)->precedence) { // Power has higher precedence than a previous implicit multiplication
+          if((*rit)->precedence == 6) (*rit)->precedence = 3;
+          break;
+        }
+    }
+    
     if(needsMul && memory->hasValue()) {
       Token *aux = new Token('*');
       if(tokens.back()->isLiteral()) aux->precedence = 6;
