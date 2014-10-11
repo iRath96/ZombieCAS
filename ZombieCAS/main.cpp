@@ -27,20 +27,22 @@ using namespace Zombie::Definitions;
 
 #define _bind(n) n(#n)
 int main(int argc, const char *argv[]) {
-  Parser::Tokenizer t("(a-x)sin(x)^-2b"); // sin((a+b)x,z)^(2a)
+  Parser::Tokenizer t("sin(x+0,y*1)"); // (a-x)sin(x,y)^-2b x
   Parser::Parser p(t.tokens);
   
   t.dump();
   p.dump();
   
   Term *ast = p.buildAST();
+  ast->tidy();
+  
   std::cout << ast->latex() << std::endl;
   
   Constant pi(3.14159f);
   Variable _bind(x), _bind(y);
   
   Function _bind(sin);
-  Invocation inv(sin, TermVector { new Constant(3.14159f) });
+  Invocation inv(sin, TermVector { new Constant(pi) });
   
   OpAdd sum;
   sum += x * pi;

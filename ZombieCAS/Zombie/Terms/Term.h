@@ -47,6 +47,8 @@ klass & operator op(Term *other) { return name(other); } \
       // TODO:2014-10-09:alex:Expand and simplify.
       
       //virtual Constant orderOf(const Term *) const = 0;
+      
+      virtual void tidy() = 0;
       virtual const std::string latex() const = 0;
     };
     

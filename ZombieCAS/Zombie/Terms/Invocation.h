@@ -27,6 +27,7 @@ namespace Zombie {
       const Definitions::Function *function;
       TermVectorManaged arguments;
       
+      virtual void tidy();
       const std::string latex() const {
         std::ostringstream os;
         os << function->name << "(";

@@ -25,12 +25,18 @@ namespace Zombie {
       
       Constant orderOf(const Term *) const;
       
+      virtual void tidy() {}
       const std::string latex() const {
         std::ostringstream os;
         os << n;
         if(d != 1) os << "/" << d;
         return os.str();
-      };
+      }
+      
+      bool operator !=(const Constant &other) const { return !(*this == other); }
+      bool operator ==(const Constant &other) const { // So much const.
+        return other.n * d == n * other.d;
+      }
     };
   }
 }

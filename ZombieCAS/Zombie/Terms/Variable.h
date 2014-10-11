@@ -19,6 +19,7 @@ namespace Zombie {
       std::string name;
       Variable(std::string name) : name(name) {}
       
+      virtual void tidy() {}
       const std::string latex() const { return name; };
     };
   }

@@ -25,7 +25,9 @@ namespace Zombie {
       };
       
     public:
+      virtual void tidy();
       virtual const std::string latex() const = 0;
+      
       TermVectorManaged operands;
     };
   }

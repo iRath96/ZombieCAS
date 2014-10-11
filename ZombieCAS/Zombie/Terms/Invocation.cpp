@@ -7,3 +7,10 @@
 //
 
 #include "Invocation.h"
+
+using namespace Zombie::Terms;
+
+void Invocation::tidy() {
+  for(auto it = arguments.begin(); it != arguments.end(); ++it)
+    (*it)->tidy();
+}

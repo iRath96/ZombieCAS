@@ -29,6 +29,7 @@ namespace Zombie {
        return order;
        }*/
       
+      virtual void tidy();
       const std::string latex() const {
         std::ostringstream os;
         for(auto it = operands.begin(); it != operands.end(); ++it) {
