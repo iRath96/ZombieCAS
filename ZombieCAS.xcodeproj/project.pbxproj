@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA77C07E19E967F50053F5F9 /* Term.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C07C19E967F50053F5F9 /* Term.cpp */; };
+		FA77C08119E9691C0053F5F9 /* Operation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C07F19E9691C0053F5F9 /* Operation.cpp */; };
+		FA77C08419E9696C0053F5F9 /* Constant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C08219E9696C0053F5F9 /* Constant.cpp */; };
+		FA77C08719E969960053F5F9 /* OpAdd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C08519E969960053F5F9 /* OpAdd.cpp */; };
+		FA77C08A19E969E30053F5F9 /* OpMultiply.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C08819E969E30053F5F9 /* OpMultiply.cpp */; };
+		FA77C08D19E96A000053F5F9 /* OpPow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C08B19E96A000053F5F9 /* OpPow.cpp */; };
+		FA77C09019E96A210053F5F9 /* Variable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C08E19E96A210053F5F9 /* Variable.cpp */; };
+		FA77C09319E96A410053F5F9 /* Invocation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C09119E96A410053F5F9 /* Invocation.cpp */; };
+		FA77C09719E96D090053F5F9 /* Function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C09519E96D090053F5F9 /* Function.cpp */; };
 		FAD9A31D19E6FDE900D5EB31 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAD9A31C19E6FDE900D5EB31 /* main.cpp */; };
 		FAD9A31F19E6FDE900D5EB31 /* ZombieCAS.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAD9A31E19E6FDE900D5EB31 /* ZombieCAS.1 */; };
 		FAD9A32919E934F800D5EB31 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAD9A32719E934F800D5EB31 /* Tokenizer.cpp */; };
@@ -28,15 +37,33 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FA77C07C19E967F50053F5F9 /* Term.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Term.cpp; sourceTree = "<group>"; };
+		FA77C07D19E967F50053F5F9 /* Term.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Term.h; sourceTree = "<group>"; };
+		FA77C07F19E9691C0053F5F9 /* Operation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Operation.cpp; sourceTree = "<group>"; };
+		FA77C08019E9691C0053F5F9 /* Operation.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Operation.h; sourceTree = "<group>"; };
+		FA77C08219E9696C0053F5F9 /* Constant.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Constant.cpp; sourceTree = "<group>"; };
+		FA77C08319E9696C0053F5F9 /* Constant.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Constant.h; sourceTree = "<group>"; };
+		FA77C08519E969960053F5F9 /* OpAdd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpAdd.cpp; sourceTree = "<group>"; };
+		FA77C08619E969960053F5F9 /* OpAdd.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = OpAdd.h; sourceTree = "<group>"; };
+		FA77C08819E969E30053F5F9 /* OpMultiply.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpMultiply.cpp; sourceTree = "<group>"; };
+		FA77C08919E969E30053F5F9 /* OpMultiply.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = OpMultiply.h; sourceTree = "<group>"; };
+		FA77C08B19E96A000053F5F9 /* OpPow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpPow.cpp; sourceTree = "<group>"; };
+		FA77C08C19E96A000053F5F9 /* OpPow.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = OpPow.h; sourceTree = "<group>"; };
+		FA77C08E19E96A210053F5F9 /* Variable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Variable.cpp; sourceTree = "<group>"; };
+		FA77C08F19E96A210053F5F9 /* Variable.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Variable.h; sourceTree = "<group>"; };
+		FA77C09119E96A410053F5F9 /* Invocation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Invocation.cpp; sourceTree = "<group>"; };
+		FA77C09219E96A410053F5F9 /* Invocation.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Invocation.h; sourceTree = "<group>"; };
+		FA77C09519E96D090053F5F9 /* Function.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Function.cpp; sourceTree = "<group>"; };
+		FA77C09619E96D090053F5F9 /* Function.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Function.h; sourceTree = "<group>"; };
 		FAD9A31919E6FDE900D5EB31 /* ZombieCAS */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ZombieCAS; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD9A31C19E6FDE900D5EB31 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		FAD9A31E19E6FDE900D5EB31 /* ZombieCAS.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = ZombieCAS.1; sourceTree = "<group>"; };
 		FAD9A32719E934F800D5EB31 /* Tokenizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tokenizer.cpp; path = Zombie/Parser/Tokenizer.cpp; sourceTree = "<group>"; };
-		FAD9A32819E934F800D5EB31 /* Tokenizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tokenizer.h; path = Zombie/Parser/Tokenizer.h; sourceTree = "<group>"; };
+		FAD9A32819E934F800D5EB31 /* Tokenizer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = Tokenizer.h; path = Zombie/Parser/Tokenizer.h; sourceTree = "<group>"; };
 		FAD9A32A19E9354500D5EB31 /* Token.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Token.cpp; path = Zombie/Parser/Token.cpp; sourceTree = "<group>"; };
-		FAD9A32B19E9354500D5EB31 /* Token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Token.h; path = Zombie/Parser/Token.h; sourceTree = "<group>"; };
+		FAD9A32B19E9354500D5EB31 /* Token.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = Token.h; path = Zombie/Parser/Token.h; sourceTree = "<group>"; };
 		FAD9A32D19E936C400D5EB31 /* Parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Parser.cpp; path = Zombie/Parser/Parser.cpp; sourceTree = "<group>"; };
-		FAD9A32E19E936C400D5EB31 /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Parser.h; path = Zombie/Parser/Parser.h; sourceTree = "<group>"; };
+		FAD9A32E19E936C400D5EB31 /* Parser.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = Parser.h; path = Zombie/Parser/Parser.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +77,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FA77C09419E96CEF0053F5F9 /* Definitions */ = {
+			isa = PBXGroup;
+			children = (
+				FA77C09519E96D090053F5F9 /* Function.cpp */,
+				FA77C09619E96D090053F5F9 /* Function.h */,
+			);
+			name = Definitions;
+			path = Zombie/Definitions;
+			sourceTree = "<group>";
+		};
 		FAD9A31019E6FDE900D5EB31 = {
 			isa = PBXGroup;
 			children = (
@@ -79,7 +116,8 @@
 		FAD9A32519E9347A00D5EB31 /* Zombie */ = {
 			isa = PBXGroup;
 			children = (
-				FAD9A33019E966E400D5EB31 /* Term */,
+				FA77C09419E96CEF0053F5F9 /* Definitions */,
+				FAD9A33019E966E400D5EB31 /* Terms */,
 				FAD9A32619E9349700D5EB31 /* Parser */,
 			);
 			name = Zombie;
@@ -98,11 +136,28 @@
 			name = Parser;
 			sourceTree = "<group>";
 		};
-		FAD9A33019E966E400D5EB31 /* Term */ = {
+		FAD9A33019E966E400D5EB31 /* Terms */ = {
 			isa = PBXGroup;
 			children = (
+				FA77C07C19E967F50053F5F9 /* Term.cpp */,
+				FA77C07D19E967F50053F5F9 /* Term.h */,
+				FA77C07F19E9691C0053F5F9 /* Operation.cpp */,
+				FA77C08019E9691C0053F5F9 /* Operation.h */,
+				FA77C08219E9696C0053F5F9 /* Constant.cpp */,
+				FA77C08319E9696C0053F5F9 /* Constant.h */,
+				FA77C08519E969960053F5F9 /* OpAdd.cpp */,
+				FA77C08619E969960053F5F9 /* OpAdd.h */,
+				FA77C08819E969E30053F5F9 /* OpMultiply.cpp */,
+				FA77C08919E969E30053F5F9 /* OpMultiply.h */,
+				FA77C08B19E96A000053F5F9 /* OpPow.cpp */,
+				FA77C08C19E96A000053F5F9 /* OpPow.h */,
+				FA77C08E19E96A210053F5F9 /* Variable.cpp */,
+				FA77C08F19E96A210053F5F9 /* Variable.h */,
+				FA77C09119E96A410053F5F9 /* Invocation.cpp */,
+				FA77C09219E96A410053F5F9 /* Invocation.h */,
 			);
-			name = Term;
+			name = Terms;
+			path = Zombie/Terms;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -158,8 +213,17 @@
 			files = (
 				FAD9A32F19E936C400D5EB31 /* Parser.cpp in Sources */,
 				FAD9A32C19E9354500D5EB31 /* Token.cpp in Sources */,
+				FA77C09719E96D090053F5F9 /* Function.cpp in Sources */,
+				FA77C08719E969960053F5F9 /* OpAdd.cpp in Sources */,
 				FAD9A31D19E6FDE900D5EB31 /* main.cpp in Sources */,
+				FA77C08A19E969E30053F5F9 /* OpMultiply.cpp in Sources */,
+				FA77C09319E96A410053F5F9 /* Invocation.cpp in Sources */,
+				FA77C08419E9696C0053F5F9 /* Constant.cpp in Sources */,
+				FA77C08119E9691C0053F5F9 /* Operation.cpp in Sources */,
 				FAD9A32919E934F800D5EB31 /* Tokenizer.cpp in Sources */,
+				FA77C07E19E967F50053F5F9 /* Term.cpp in Sources */,
+				FA77C08D19E96A000053F5F9 /* OpPow.cpp in Sources */,
+				FA77C09019E96A210053F5F9 /* Variable.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +333,7 @@
 				FAD9A32419E6FDE900D5EB31 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

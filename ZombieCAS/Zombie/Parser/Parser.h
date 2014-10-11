@@ -10,19 +10,27 @@
 #define __ZombieCAS__Parser__
 
 #include <iostream>
-#include "Token.h"
 #include <vector>
+#include <string>
+
+#include "Token.h"
+#include "Term.h"
 
 namespace Zombie {
   namespace Parser {
     class Parser {
     public:
-      Parser(std::string str) {}
-      Parser(const std::vector<Token *> &tokens);
+      Parser(std::string);
+      Parser(const std::vector<Token *> &);
       
       std::vector<const Token *> rpn;
       
       void dump() const;
+      
+      Terms::Term *buildAST() const;
+      
+    private:
+      void buildRPN(const std::vector<Token *> &);
     };
   }
 }

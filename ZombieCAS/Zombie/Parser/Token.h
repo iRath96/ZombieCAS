@@ -16,6 +16,7 @@ namespace Zombie {
     class Token {
     public:
       std::string text;
+      
       int precedence;
       bool rightToLeft;
       
@@ -26,6 +27,8 @@ namespace Zombie {
       bool hasValue() const { return precedence == 0 || precedence == 5 || precedence == 6; }
       bool isOperator() const { return precedence != 0; }
       bool isInvocation() const { return precedence == 5; }
+      
+      bool isLiteral() const { return (text[0] >= '0' && text[0] <= '9') || text[0] == '.'; }
     };
   }
 }

@@ -18,6 +18,11 @@ Tokenizer::Tokenizer(std::string input) {
   for(int i = 0; i < input.length(); ++i) {
     char chr = input[i];
     
+    if(memory && ((chr >= '0' && chr <= '9') || chr == '.') != memory->isLiteral()) {
+      i -= 1;
+      goto acceptToken;
+    }
+    
     if(chr == ' ') {
       if(memory) goto acceptToken;
       else continue;
