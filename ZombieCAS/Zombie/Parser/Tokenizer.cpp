@@ -29,18 +29,28 @@ Tokenizer::Tokenizer(std::string input) {
       else continue;
     }
     
-    if(chr == '(' && memory) {
-      memory->invoke();
-      i -= 1;
-      goto acceptToken;
+    if(chr == '(') {
+      if(memory) {
+        memory->invoke();
+        i -= 1;
+        goto acceptToken;
+      } else {
+        memory = new Token(chr);
+        goto acceptToken;
+      }
     }
     
     if(chr == '^' ||
        chr == '*' || chr == '/' ||
        chr == '+' || (chr == '-' && !canBeUnary) ||
-       chr == ')' || chr == ',') if(memory) {
-      i -= 1;
-      goto acceptToken;
+       chr == ')' || chr == ',') {
+      if(memory) {
+        i -= 1;
+        goto acceptToken;
+      } else if(chr != ')') {
+        memory = new Token(chr);
+        goto acceptToken;
+      }
     }
     
     if(memory) memory->append(chr);
