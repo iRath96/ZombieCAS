@@ -14,11 +14,12 @@ using namespace Zombie::Parser;
 Tokenizer::Tokenizer(std::string input) {
   Token *memory = NULL;
   bool needsMul = false;
+  bool canBeUnary = true;
   
   for(int i = 0; i < input.length(); ++i) {
     char chr = input[i];
     
-    if(memory && ((chr >= '0' && chr <= '9') || chr == '.') != memory->isLiteral()) {
+    if(memory && ((chr >= '0' && chr <= '9') || chr == '.' || (chr == '-' && canBeUnary)) != memory->isLiteral()) {
       i -= 1;
       goto acceptToken;
     }
@@ -36,24 +37,34 @@ Tokenizer::Tokenizer(std::string input) {
     
     if(chr == '^' ||
        chr == '*' || chr == '/' ||
-       chr == '+' || chr == '-' ||
+       chr == '+' || (chr == '-' && !canBeUnary) ||
        chr == ')' || chr == ',') if(memory) {
       i -= 1;
       goto acceptToken;
     }
     
     if(memory) memory->append(chr);
-    else memory = new Token(chr);
+    else {
+      memory = new Token(chr);
+      if(canBeUnary) memory->precedence = 0;
+    }
     
     if(memory->precedence) goto acceptToken;
     
+    canBeUnary = false;
     if(i < input.length() - 1) continue;
     
   acceptToken:
-    if(needsMul && memory->hasValue()) tokens.push_back(new Token('*'));
+    if(needsMul && memory->hasValue()) {
+      Token *aux = new Token('*');
+      if(tokens.back()->isLiteral()) aux->precedence = 6;
+      tokens.push_back(aux);
+    }
     
     tokens.push_back(memory);
     needsMul = memory->precedence == 0 || memory->text == ")";
+    
+    canBeUnary = !memory->hasValue();
     memory = NULL;
   }
 }

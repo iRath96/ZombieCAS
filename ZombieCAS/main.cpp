@@ -27,7 +27,7 @@ using namespace Zombie::Definitions;
 
 #define _bind(n) n(#n)
 int main(int argc, const char *argv[]) {
-  Parser::Tokenizer t("a - b"); // sin((a+b)x,z)^(2a)
+  Parser::Tokenizer t("a-x"); // sin((a+b)x,z)^(2a)
   Parser::Parser p(t.tokens);
   
   t.dump();

@@ -16,7 +16,7 @@ Token::Token(char chr) {
   
   switch(text[0]) {
     case ',': precedence = 1; break;
-    case '(': precedence = 6; break;
+    case '(': precedence = 7; break;
     case ')': precedence = 1; break;
     case '^': precedence = 4; rightToLeft = true; break;
     case '*': case '/': precedence = 3; break;

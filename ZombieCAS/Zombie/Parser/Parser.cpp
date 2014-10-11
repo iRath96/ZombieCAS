@@ -114,7 +114,7 @@ result = { (void *)new klass(TermVector { \
     } else
       result = {
         (token->isLiteral() ?
-         (void *)new Constant(std::stod(token->text)) :
+         (void *)new Constant(std::stod(token->text == "-" ? "-1" : token->text)) :
          (void *)new Variable(token->text)),
         false };
     stack.push(result);
