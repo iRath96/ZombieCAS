@@ -19,11 +19,14 @@ namespace Zombie {
     class Operation : public Term {
     protected:
       Operation() {}
-      Operation(TermVector operands) : operands(operands) {};
+      Operation(TermVector operands) {
+        for(auto it = operands.begin(); it != operands.end(); ++it)
+          this->operands.push_back(std::unique_ptr<Term>(*it));
+      };
       
     public:
       virtual const std::string latex() const = 0;
-      TermVector operands;
+      TermVectorManaged operands;
     };
   }
 }

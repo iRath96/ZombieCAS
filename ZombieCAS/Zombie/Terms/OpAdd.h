@@ -20,8 +20,8 @@ namespace Zombie {
       OpAdd() {}
       OpAdd(TermVector o) : Operation(o) {}
       
-      OpAdd &operator +=(const Term *other);
-      OpAdd &operator -=(const Term *other);
+      OpAdd &operator +=(Term *other);
+      OpAdd &operator -=(Term *other);
       
       /*
        Constant orderOf(const Term *t) const {
@@ -40,7 +40,7 @@ namespace Zombie {
         std::ostringstream os;
         for(auto it = operands.begin(); it != operands.end(); ++it) {
           if(it != operands.begin()) os << " + ";
-          if(dynamic_cast<const Operation *>(*it))
+          if(dynamic_cast<const Operation *>(it->get()))
             os << "(" << (*it)->latex() << ")";
           else
             os << (*it)->latex();

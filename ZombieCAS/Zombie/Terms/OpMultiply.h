@@ -20,12 +20,12 @@ namespace Zombie {
       OpMultiply() {}
       OpMultiply(TermVector o) : Operation(o) {}
       
-      OpMultiply &operator *=(const Term *other) {
+      OpMultiply &operator *=(Term *other) {
         /*if(dynamic_cast<const Constant *>(other)) // We are being multiplied with a zero, let's return zero then.
          if(((Constant *)other)->n == 0.f)
          return *new Constant(0);*/
         
-        operands.push_back(other);
+        operands.push_back(std::unique_ptr<Term>(other));
         return *this;
       };
       
@@ -40,7 +40,7 @@ namespace Zombie {
         std::ostringstream os;
         for(auto it = operands.begin(); it != operands.end(); ++it) {
           if(it != operands.begin()) os << " * ";
-          if(dynamic_cast<const Operation *>(*it))
+          if(dynamic_cast<const Operation *>(it->get()))
             os << "(" << (*it)->latex() << ")";
           else
             os << (*it)->latex();

@@ -50,7 +50,8 @@ klass & operator op(Term *other) { return name(other); } \
       virtual const std::string latex() const = 0;
     };
     
-    typedef std::vector<const Term *> TermVector;
+    typedef std::vector<Term *> TermVector;
+    typedef std::vector<std::unique_ptr<Term>> TermVectorManaged;
   }
 }
 

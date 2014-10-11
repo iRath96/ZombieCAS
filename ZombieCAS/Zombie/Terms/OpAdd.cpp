@@ -13,12 +13,12 @@
 
 using namespace Zombie::Terms;
 
-OpAdd &OpAdd::operator+=(const Term *other) {
-  operands.push_back(other);
+OpAdd &OpAdd::operator+=(Term *other) {
+  operands.push_back(std::unique_ptr<Term>(other));
   return *this;
 };
 
-OpAdd &OpAdd::operator-=(const Term *other) {
-  operands.push_back(new OpMultiply(TermVector { new Constant(-1), other }));
+OpAdd &OpAdd::operator-=(Term *other) {
+  operands.push_back(std::unique_ptr<Term>(new OpMultiply(TermVector { new Constant(-1), other })));
   return *this;
 };

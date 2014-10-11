@@ -19,10 +19,13 @@ namespace Zombie {
   namespace Terms {
     class Invocation : public Term {
     public:
-      Invocation(const Definitions::Function *function, TermVector arguments) : function(function), arguments(arguments) {};
+      Invocation(const Definitions::Function *function, TermVector arguments) : function(function) {
+        for(auto it = arguments.begin(); it != arguments.end(); ++it)
+          this->arguments.push_back(std::unique_ptr<Term>(*it));
+      };
       
       const Definitions::Function *function;
-      TermVector arguments;
+      TermVectorManaged arguments;
       
       const std::string latex() const {
         std::ostringstream os;
