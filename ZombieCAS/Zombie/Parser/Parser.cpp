@@ -128,6 +128,11 @@ result = { (void *)new klass(TermVector { \
 void Parser::dump() const {
   std::cout << __PRETTY_FUNCTION__ << " with " << rpn.size() << " elements" << std::endl;
   
+  std::cout << "  ";
+  for(auto it = rpn.begin(); it != rpn.end(); ++it)
+    std::cout << (*it)->text << " ";
+  std::cout << std::endl;
+  
   int index = 0;
   std::stack<int> stack;
   

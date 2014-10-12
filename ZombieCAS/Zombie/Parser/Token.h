@@ -24,7 +24,7 @@ namespace Zombie {
       void append(char chr) { text += chr; }
       void invoke() { precedence = 5; }
       
-      bool hasValue() const { return precedence == 0 || precedence == 5 || precedence == 7; }
+      bool hasValue() const { return precedence == 0 || precedence == 5 || precedence == 8; }
       bool isOperator() const { return precedence != 0; }
       bool isInvocation() const { return precedence == 5; }
       

@@ -67,8 +67,17 @@ Tokenizer::Tokenizer(std::string input) {
   acceptToken:
     if(memory->text == "^" && !tokens.empty()) {
       for(auto rit = tokens.rbegin(); rit != tokens.rend(); ++rit)
-        if((*rit)->precedence) { // Power has higher precedence than a previous implicit multiplication
-          if((*rit)->precedence == 6) (*rit)->precedence = 3;
+        // Power has higher precedence than a previous implicit multiplication ( 2x^2 => 2*x^2 )
+        if((*rit)->precedence) {
+          if((*rit)->precedence == 6) {
+            // But not if it was implicit due to a unary minus ( 2^-b^2 => 2^(-b^2) )
+            if((rit+1) == tokens.rend() || (*(rit+1))->text != "-")
+              (*rit)->precedence = 3;
+            // If this power follows a unary minus, however, it should bind stronger
+            // than the unary minus ( 2^-a^2 => 2^(-(a^2)) )
+            else
+              memory->precedence = 7;
+          }
           break;
         }
     }
