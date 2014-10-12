@@ -34,7 +34,10 @@ namespace Zombie {
         std::ostringstream os;
         for(auto it = operands.begin(); it != operands.end(); ++it) {
           if(it != operands.begin()) os << " ^ ";
-          os << (*it)->latex();
+          if(dynamic_cast<Operation *>(it->get()))
+            os << "(" << (*it)->latex() << ")";
+          else
+            os << (*it)->latex();
         } return os.str();
       };
     };
