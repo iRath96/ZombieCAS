@@ -21,6 +21,12 @@ namespace Zombie {
       
       virtual void tidy() {}
       const std::string latex() const { return name; };
+      
+      bool operator ==(const Term &other) const {
+        if(dynamic_cast<const Variable *>(&other))
+          return ((const Variable *)&other)->name == name;
+        return false;
+      }
     };
   }
 }

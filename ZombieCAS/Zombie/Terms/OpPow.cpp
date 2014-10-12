@@ -22,10 +22,10 @@ void OpPow::tidy() {
   bool baseConst = dynamic_cast<Constant *>(operands[0].get()) != NULL;
   bool expConst  = dynamic_cast<Constant *>(operands[1].get()) != NULL;
   
-       if(baseConst && *(Constant *)(operands[0].get()) == Constant(0)) operands.pop_back();
-  else if(baseConst && *(Constant *)(operands[0].get()) == Constant(1)) operands.pop_back();
-  else if(expConst  && *(Constant *)(operands[1].get()) == Constant(1)) operands.pop_back();
-  else if(expConst  && *(Constant *)(operands[1].get()) == Constant(0)) {
+       if(baseConst && *(Constant *)(operands[0].get()) == 0) operands.pop_back();
+  else if(baseConst && *(Constant *)(operands[0].get()) == 1) operands.pop_back();
+  else if(expConst  && *(Constant *)(operands[1].get()) == 1) operands.pop_back();
+  else if(expConst  && *(Constant *)(operands[1].get()) == 0) {
     operands.clear();
     operands.push_back(std::unique_ptr<Term>(new Constant(1)));
   } else if(dynamic_cast<OpPow *>(operands[0].get())) {

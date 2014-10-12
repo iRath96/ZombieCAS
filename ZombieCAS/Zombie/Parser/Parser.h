@@ -27,7 +27,7 @@ namespace Zombie {
       
       void dump() const;
       
-      Terms::Term *buildAST() const;
+      Terms::Term *buildAST(bool tidy = true) const;
       
     private:
       void buildRPN(const std::vector<Token *> &);

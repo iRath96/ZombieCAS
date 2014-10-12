@@ -27,14 +27,13 @@ using namespace Zombie::Definitions;
 
 #define _bind(n) n(#n)
 int main(int argc, const char *argv[]) {
-  Parser::Tokenizer t("a^-1b^2");
+  Parser::Tokenizer t("a*1+0");
   Parser::Parser p(t.tokens);
   
   t.dump();
   p.dump();
   
   Term *ast = p.buildAST();
-  ast->tidy();
   
   std::cout << ast->latex() << std::endl;
   

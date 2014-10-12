@@ -27,8 +27,13 @@ void Operation::tidy() {
   
   operands.clear();
   
-  Constant neutral(dynamic_cast<OpMultiply *>(this) ? 1 : 0);
+  int neutral = dynamic_cast<OpMultiply *>(this) ? 1 : 0;
   for(auto it = newOperands.begin(); it != newOperands.end(); ++it)
     if(!dynamic_cast<Constant *>(*it) || *(Constant *)*it != neutral)
       operands.push_back(std::unique_ptr<Term>(*it));
+}
+
+bool Operation::operator ==(const Term &other) const {
+  if(typeid(*this) != typeid(other)) return false;
+  return true;
 }

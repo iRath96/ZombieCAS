@@ -29,6 +29,8 @@ namespace Zombie {
       virtual const std::string latex() const = 0;
       
       TermVectorManaged operands;
+      
+      virtual bool operator ==(const Term &other) const;
     };
   }
 }

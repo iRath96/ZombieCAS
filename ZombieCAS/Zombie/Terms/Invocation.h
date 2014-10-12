@@ -37,6 +37,17 @@ namespace Zombie {
         } os << ")";
         return os.str();
       };
+      
+      bool operator ==(const Term &other) const {
+        if(dynamic_cast<const Invocation *>(&other)) {
+          const Invocation *o = (const Invocation *)&other;
+          if(o->function != function) return false;
+          if(o->arguments.size() != arguments.size()) return false;
+          for(unsigned long i = 0, j = arguments.size(); i < j; ++i)
+            if(o->arguments[i] != arguments[i]) return false;
+          return true;
+        } return false;
+      }
     };
   }
 }

@@ -50,6 +50,9 @@ klass & operator op(Term *other) { return name(other); } \
       
       virtual void tidy() = 0;
       virtual const std::string latex() const = 0;
+      
+      virtual bool operator !=(const Term &other) { return !(*this == other); }
+      virtual bool operator ==(const Term &other) const = 0;
     };
     
     typedef std::vector<Term *> TermVector;

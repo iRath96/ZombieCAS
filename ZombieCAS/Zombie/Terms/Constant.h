@@ -33,9 +33,29 @@ namespace Zombie {
         return os.str();
       }
       
-      bool operator !=(const Constant &other) const { return !(*this == other); }
-      bool operator ==(const Constant &other) const { // So much const.
-        return other.n * d == n * other.d;
+#define def_op(op) bool operator op(double other) const { return this->n op other * this->d; }
+      def_op(==)
+      def_op(!=)
+      def_op(<)
+      def_op(<=)
+      def_op(>)
+      def_op(>=)
+#undef def_op
+      
+#define def_op(op) bool operator op(const Constant &other) const { return this->n * other.d op other.n * this->d; }
+      def_op(==)
+      def_op(!=)
+      def_op(<)
+      def_op(<=)
+      def_op(>)
+      def_op(>=)
+#undef def_op
+      
+      bool operator ==(const Term &other) const {
+        if(dynamic_cast<const Constant *>(&other)) {
+          const Constant *that = (const Constant *)&other;
+          return this->n * that->d == that->n * this->d;
+        } return false;
       }
     };
   }
