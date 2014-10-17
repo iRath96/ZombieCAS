@@ -21,37 +21,37 @@
 
 #include "Function.h"
 
+#include "Node.h"
+
 using namespace Zombie;
 using namespace Zombie::Terms;
 using namespace Zombie::Definitions;
 
 #define _bind(n) n(#n)
 int main(int argc, const char *argv[]) {
-  Parser::Tokenizer t("(a+b)(b+c)");
+  Parser::Tokenizer t("(x+1)(x-1)");
   Parser::Parser p(t.tokens);
   
   //t.dump();
   //p.dump();
   
-  TermSharedPtr ast = p.buildAST();
+  Node ast;
+  ast = p.buildAST();
   
-  std::cout << "f (x) = " << ast->latex() << std::endl;
-  ast = ast->simplify(ast);
-  ast = ast->tidy(ast);
-  std::cout << "f (x) = " << ast->latex() << std::endl;
-  /*ast = ast->expand(ast);
-  ast = ast->tidy(ast);
-  std::cout << "f (x) = " << ast->latex() << std::endl;
-  ast = ast->simplify(ast);
-  ast = ast->tidy(ast);
-  std::cout << "f (x) = " << ast->latex() << std::endl;*/
+  std::cout << "f (x) = " << ast.latex() << std::endl;
+  ast.simplify();
+  std::cout << "f (x) = " << ast.latex() << std::endl;
+  /*
+   ast.expand();
+  std::cout << "f (x) = " << ast.latex() << std::endl;
+  ast.simplify();
+  std::cout << "f (x) = " << ast.latex() << std::endl;*/
   
-  TermSharedPtr derivate = ast->derive(Variable("x"));
+  Node derivate = ast.derive(Variable("x"));
   
-  std::cout << "f'(x) = " << derivate->latex() << std::endl;
-  derivate->simplify(derivate);
-  derivate = derivate->tidy(derivate);
-  std::cout << "f'(x) = " << derivate->latex() << std::endl;
+  std::cout << "f'(x) = " << derivate.latex() << std::endl;
+  derivate.simplify();
+  std::cout << "f'(x) = " << derivate.latex() << std::endl;
   
   return 0;
 }

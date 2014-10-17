@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA39C75E19F1D0C4004E9B3F /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA39C75C19F1D0C4004E9B3F /* Node.cpp */; };
 		FA77C07E19E967F50053F5F9 /* Term.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C07C19E967F50053F5F9 /* Term.cpp */; };
 		FA77C08119E9691C0053F5F9 /* Operation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C07F19E9691C0053F5F9 /* Operation.cpp */; };
 		FA77C08419E9696C0053F5F9 /* Constant.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C08219E9696C0053F5F9 /* Constant.cpp */; };
@@ -37,6 +38,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FA39C75C19F1D0C4004E9B3F /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
+		FA39C75D19F1D0C4004E9B3F /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		FA77C07C19E967F50053F5F9 /* Term.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Term.cpp; sourceTree = "<group>"; };
 		FA77C07D19E967F50053F5F9 /* Term.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Term.h; sourceTree = "<group>"; };
 		FA77C07F19E9691C0053F5F9 /* Operation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Operation.cpp; sourceTree = "<group>"; };
@@ -155,6 +158,8 @@
 				FA77C08F19E96A210053F5F9 /* Variable.h */,
 				FA77C09119E96A410053F5F9 /* Invocation.cpp */,
 				FA77C09219E96A410053F5F9 /* Invocation.h */,
+				FA39C75C19F1D0C4004E9B3F /* Node.cpp */,
+				FA39C75D19F1D0C4004E9B3F /* Node.h */,
 			);
 			name = Terms;
 			path = Zombie/Terms;
@@ -212,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAD9A32F19E936C400D5EB31 /* Parser.cpp in Sources */,
+				FA39C75E19F1D0C4004E9B3F /* Node.cpp in Sources */,
 				FAD9A32C19E9354500D5EB31 /* Token.cpp in Sources */,
 				FA77C09719E96D090053F5F9 /* Function.cpp in Sources */,
 				FA77C08719E969960053F5F9 /* OpAdd.cpp in Sources */,
