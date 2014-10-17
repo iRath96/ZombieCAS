@@ -34,3 +34,9 @@ TermSharedPtr OpAdd::deriveUntidy(const Variable &var) const {
     *result += (*it)->deriveUntidy(var);
   return TermSharedPtr(result);
 }
+
+TermSharedPtr OpAdd::simplify(TermSharedPtr &self) {
+  for(size_t i = 0, j = operands.size(); i < j; ++i)
+    operands[i] = operands[i]->simplify(operands[i]);
+  return self->tidy(self);
+}

@@ -10,6 +10,8 @@
 
 #include "OpMultiply.h"
 #include "Constant.h"
+#include "Function.h"
+#include "Invocation.h"
 
 using namespace Zombie::Terms;
 
@@ -45,4 +47,23 @@ TermSharedPtr OpPow::tidy(TermSharedPtr &self) {
   }
   
   return self;
+}
+
+TermSharedPtr OpPow::deriveUntidy(const Variable &var) const {
+  // Think of this as
+  //   [ e ^ (ln(base) * exp) ]'
+  // = [ ln(base) * exp ]' * e ^ (ln(base) * exp)
+  // = [ ln(base) * exp ]' * base ^ exp
+  
+  TermSharedPtr mul = TermSharedPtr(new OpMultiply(TermVectorShared {
+    TermSharedPtr(new Invocation(new Definitions::Function("ln"), TermVectorShared { operands[0] })),
+    operands[1]
+  }));
+  
+  mul = TermSharedPtr(new OpMultiply(TermVectorShared {
+    mul->derive(var),
+    TermSharedPtr(new OpPow(TermVectorShared { operands[0], operands[1] }))
+  }));
+  
+  return TermSharedPtr(mul);
 }

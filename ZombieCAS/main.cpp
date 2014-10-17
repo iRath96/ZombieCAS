@@ -27,16 +27,23 @@ using namespace Zombie::Definitions;
 
 #define _bind(n) n(#n)
 int main(int argc, const char *argv[]) {
-  Parser::Tokenizer t("1+(0*a*b)");
+  Parser::Tokenizer t("x^(x+1)/x");
   Parser::Parser p(t.tokens);
   
-  t.dump();
-  p.dump();
+  //t.dump();
+  //p.dump();
   
   TermSharedPtr ast = p.buildAST();
   
-  std::cout << ast->latex() << std::endl;
-  std::cout << ast->derive(Variable("x"))->latex() << std::endl;
+  std::cout << "f (x) = " << ast->latex() << std::endl;
+  ast->simplify(ast);
+  std::cout << "f (x) = " << ast->latex() << std::endl;
+  
+  TermSharedPtr derivate = ast->derive(Variable("x"));
+  
+  std::cout << "f'(x) = " << derivate->latex() << std::endl;
+  derivate->simplify(derivate);
+  std::cout << "f'(x) = " << derivate->latex() << std::endl;
   
   return 0;
 }

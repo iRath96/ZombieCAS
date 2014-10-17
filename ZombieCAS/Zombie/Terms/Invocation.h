@@ -33,7 +33,16 @@ namespace Zombie {
       const Definitions::Function *function;
       TermVectorShared arguments;
       
-      virtual TermSharedPtr deriveUntidy(const Variable &) const { return NULL; }
+      virtual TermSharedPtr deriveUntidy(const Variable &var) const {
+        if(function->name == "ln") {
+          TermSharedPtr derivate = arguments[0]->derive(var);
+          TermSharedPtr divisor = arguments[0];
+          return Term::divide(derivate, divisor);
+        }
+        
+        std::cout << "Ouch! Cannot derive function " << function->name << "!" << std::endl;
+        return NULL;
+      }
       
       virtual TermSharedPtr tidy(TermSharedPtr &self);
       const std::string latex() const {

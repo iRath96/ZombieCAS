@@ -45,6 +45,29 @@ bool operator op(const Constant &other) const { return this->n * other.d op othe
       def_op(>=)
 #undef def_op
       
+#define def_op(op) \
+      Constant &operator op##=(const Constant &other) { \
+        this->n = this->n * other.d op other.n * this->d; \
+        this->d *= other.d; \
+        return *this; \
+      }
+      
+      def_op(+)
+      def_op(-)
+#undef def_op
+      
+      Constant &operator *=(const Constant &other) {
+        this->n *= other.n;
+        this->d *= other.d;
+        return *this;
+      }
+      
+      Constant &operator /=(const Constant &other) {
+        this->n *= other.d;
+        this->d *= other.n;
+        return *this;
+      }
+      
       bool operator ==(const Term &other) const {
         if(dynamic_cast<const Constant *>(&other)) {
           const Constant *that = (const Constant *)&other;

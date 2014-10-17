@@ -38,6 +38,7 @@ namespace Zombie {
        return max;
        }*/
       
+      virtual TermSharedPtr simplify(TermSharedPtr &);
       virtual TermSharedPtr deriveUntidy(const Variable &) const;
       
       const std::string latex() const {

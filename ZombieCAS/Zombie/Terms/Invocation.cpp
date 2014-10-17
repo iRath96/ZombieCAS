@@ -13,5 +13,5 @@ using namespace Zombie::Terms;
 TermSharedPtr Invocation::tidy(TermSharedPtr &self) {
   for(int i = 0; i < arguments.size(); ++i)
     arguments[i] = arguments[i]->tidy(arguments[i]);
-  return TermSharedPtr(this);
+  return self;
 }

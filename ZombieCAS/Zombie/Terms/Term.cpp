@@ -16,7 +16,7 @@
 using namespace Zombie::Terms;
 
 #define def_op(name) \
-inline TermSharedPtr Term::name(TermSharedPtr &a, TermSharedPtr &b)
+TermSharedPtr Term::name(TermSharedPtr &a, TermSharedPtr &b)
 def_op(multiply) {
   return TermSharedPtr(new OpMultiply(TermVectorShared {
     a,

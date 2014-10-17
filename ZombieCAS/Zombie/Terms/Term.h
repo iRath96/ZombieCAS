@@ -64,12 +64,27 @@ static TermSharedPtr name(TermSharedPtr &a, TermSharedPtr &b); \
       virtual ~Term() {}
       
       virtual TermSharedPtr tidy(TermSharedPtr &self) = 0;
+      virtual TermSharedPtr simplify(TermSharedPtr &self) { return self; }
       virtual const std::string latex() const = 0;
       
       virtual bool operator !=(const Term &other) { return !(*this == other); }
       virtual bool operator ==(const Term &other) const = 0;
     };
+    
+    struct TSPKey {
+      TermSharedPtr ptr;
+      bool operator ==(const TSPKey &other) const { return *ptr == *(other.ptr); }
+    };
   }
+}
+
+namespace std {
+  template <>
+  struct hash<Zombie::Terms::TSPKey> {
+    std::size_t operator()(const Zombie::Terms::TSPKey &key) const {
+      return typeid(*key.ptr.get()).hash_code();
+    }
+  };
 }
 
 #endif /* defined(__ZombieCAS__Term__) */

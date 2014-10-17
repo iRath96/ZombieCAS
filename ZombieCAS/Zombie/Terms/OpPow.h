@@ -31,7 +31,7 @@ namespace Zombie {
        return order;
        }*/
       
-      virtual TermSharedPtr deriveUntidy(const Variable &) const { return NULL; }
+      virtual TermSharedPtr deriveUntidy(const Variable &) const;
       
       virtual TermSharedPtr tidy(TermSharedPtr &self);
       const std::string latex() const {
