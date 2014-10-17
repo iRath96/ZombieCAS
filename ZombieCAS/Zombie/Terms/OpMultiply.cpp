@@ -48,7 +48,7 @@ TermSharedPtr OpMultiply::simplify(TermSharedPtr &self) {
   
   operands.clear();
   
-  std::cout << "(start)" << std::endl;
+  std::cout << "= start ===" << std::endl;
   
   for(auto it = exponents.begin(); it != exponents.end(); ++it) {
     TermSharedPtr base = it->first.ptr;
@@ -68,4 +68,35 @@ TermSharedPtr OpMultiply::simplify(TermSharedPtr &self) {
   }
   
   return self->tidy(self);
+}
+
+TermSharedPtr OpMultiply::expand(TermSharedPtr &self) {
+  OpAdd *add = new OpAdd();
+  for(auto it = operands.begin(); it != operands.end(); ++it) {
+    if(dynamic_cast<OpAdd *>(it->get())) {
+      OpAdd *factor = (OpAdd *)it->get();
+      
+      if(add->operands.size() == 0) {
+        for(auto it2 = factor->operands.begin(); it2 != factor->operands.end(); ++it2)
+          add->operands.push_back(*it2);
+        continue;
+      }
+      
+      OpAdd *newAdd = new OpAdd();
+      
+      // TODO:2014-10-18:alex:This is inefficient. There should be a *= operator.
+      for(auto it2 = add->operands.begin(); it2 != add->operands.end(); ++it2)
+        for(auto it3 = factor->operands.begin(); it3 != factor->operands.end(); ++it3)
+          newAdd->operands.push_back(Term::multiply(*it2, *it3));
+      
+      delete add;
+      add = newAdd;
+    } else
+      if(add->operands.size() == 0) add->operands.push_back(*it);
+      else
+        for(size_t i = 0, j = add->operands.size(); i < j; ++i)
+          add->operands[i] = Term::multiply(add->operands[i], *it);
+  }
+  
+  return TermSharedPtr(add);
 }

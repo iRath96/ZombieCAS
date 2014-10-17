@@ -21,12 +21,18 @@ namespace Zombie {
       double n = 1.f;
       unsigned long d = 1;
       
+      explicit operator double() { return n / d; }
+      
       Constant(double v) : n(v) {}
       
       virtual TermSharedPtr deriveUntidy(const Variable &v) const { return TermSharedPtr(new Constant(0)); }
       Constant orderOf(const Term *) const;
       
-      virtual TermSharedPtr tidy(TermSharedPtr &self) { return self; }
+      virtual TermSharedPtr tidy(TermSharedPtr &self) {
+        // TODO:2014-10-18:alex:Important. Implement this.
+        return self;
+      }
+      
       const std::string latex() const {
         std::ostringstream os;
         os << n;

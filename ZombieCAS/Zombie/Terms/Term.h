@@ -51,7 +51,6 @@ static TermSharedPtr name(TermSharedPtr &a, TermSharedPtr &b); \
       };
       
       // TODO:2014-10-09:alex:Copy constructor.
-      // TODO:2014-10-09:alex:Expand and simplify.
       
       //virtual Constant orderOf(const Term *) const = 0;
       
@@ -65,6 +64,7 @@ static TermSharedPtr name(TermSharedPtr &a, TermSharedPtr &b); \
       
       virtual TermSharedPtr tidy(TermSharedPtr &self) = 0;
       virtual TermSharedPtr simplify(TermSharedPtr &self) { return self; }
+      virtual TermSharedPtr expand(TermSharedPtr &self) { return self; }
       virtual const std::string latex() const = 0;
       
       virtual bool operator !=(const Term &other) { return !(*this == other); }

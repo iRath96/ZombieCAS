@@ -8,10 +8,13 @@
 
 #include "OpPow.h"
 
+#include "OpAdd.h"
 #include "OpMultiply.h"
 #include "Constant.h"
 #include "Function.h"
 #include "Invocation.h"
+
+#include <math.h>
 
 using namespace Zombie::Terms;
 
@@ -23,6 +26,14 @@ TermSharedPtr OpPow::tidy(TermSharedPtr &self) {
   
   bool baseConst = dynamic_cast<Constant *>(operands[0].get()) != NULL;
   bool expConst  = dynamic_cast<Constant *>(operands[1].get()) != NULL;
+  
+  if(baseConst && expConst) {
+    double base = (double)(*(Constant *)operands[0].get());
+    double exp = (double)(*(Constant *)operands[1].get());
+    TermSharedPtr c = TermSharedPtr(new Constant(::pow(base, exp)));
+    // TODO:2014-10-18:alex:Check if the number is good.
+    return c;
+  }
   
        if(baseConst && *(Constant *)(operands[0].get()) == 0) operands.pop_back();
   else if(baseConst && *(Constant *)(operands[0].get()) == 1) operands.pop_back();
@@ -66,4 +77,32 @@ TermSharedPtr OpPow::deriveUntidy(const Variable &var) const {
   }));
   
   return TermSharedPtr(mul);
+}
+
+TermSharedPtr OpPow::expand(TermSharedPtr &self) {
+  operands[0] = operands[0]->expand(operands[0]);
+  operands[1] = operands[1]->expand(operands[1]);
+  
+  if(dynamic_cast<OpAdd *>(operands[1].get())) {
+    // TODO:2014-10-18:alex:Do something awesome here.
+  }
+  
+  if(dynamic_cast<OpMultiply *>(operands[0].get())) {
+    OpMultiply *base = (OpMultiply *)operands[0].get();
+    OpMultiply *result = new OpMultiply();
+    
+    for(auto it = base->operands.begin(); it != base->operands.end(); ++it)
+      result->operands.push_back(Term::pow(*it, operands[1]));
+    
+    return TermSharedPtr(result);
+  }
+  
+  if(dynamic_cast<OpAdd *>(operands[0].get()))
+    if(dynamic_cast<Constant *>(operands[1].get()))
+      if(((Constant *)operands[1].get())->d == 1 && ((Constant *)operands[1].get())->n <= 4) {
+        int c = ((Constant *)operands[1].get())->n;
+        // TODO:2014-10-18:alex:Do something awesome here.
+      }
+  
+  return self;
 }

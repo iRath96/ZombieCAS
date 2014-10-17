@@ -33,7 +33,9 @@ namespace Zombie {
       
       virtual TermSharedPtr deriveUntidy(const Variable &) const;
       
-      virtual TermSharedPtr tidy(TermSharedPtr &self);
+      virtual TermSharedPtr tidy(TermSharedPtr &);
+      virtual TermSharedPtr expand(TermSharedPtr &);
+      
       const std::string latex() const {
         std::ostringstream os;
         for(auto it = operands.begin(); it != operands.end(); ++it) {
