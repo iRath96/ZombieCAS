@@ -65,7 +65,7 @@ void Parser::buildRPN(const std::vector<Token *> &tokens) {
   
 }
 
-Term *Parser::buildAST(bool tidy) const {
+TermSharedPtr Parser::buildAST(bool tidy) const {
   struct stack_element_t {
     void *element;
     bool isVector;
@@ -123,8 +123,9 @@ result = { (void *)new klass(TermVector { \
   /* if(stack.size() != 1); */ // TODO:2014-10-11:alex:Throw an exception here.
   /* if(stack.top().isVector); */ // TODO:2014-10-11:alex:Throw an exception here.
   
-  if(tidy) (*(Term *)stack.top().element).tidy();
-  return (Term *)stack.top().element;
+  TermSharedPtr t = TermSharedPtr((Term *)stack.top().element);
+  if(tidy) return t->tidy(t);
+  return t;
 }
 
 void Parser::dump() const {

@@ -18,14 +18,16 @@ namespace Zombie {
     class OpMultiply : public Operation {
     public:
       OpMultiply() {}
-      OpMultiply(TermVector o) : Operation(o) {}
       
-      OpMultiply &operator *=(Term *other) {
+      template<class T>
+      OpMultiply(T o) : Operation(o) {}
+      
+      OpMultiply &operator *=(TermSharedPtr other) {
         /*if(dynamic_cast<const Constant *>(other)) // We are being multiplied with a zero, let's return zero then.
          if(((Constant *)other)->n == 0.f)
          return *new Constant(0);*/
         
-        operands.push_back(std::unique_ptr<Term>(other));
+        operands.push_back(other);
         return *this;
       };
       
@@ -35,6 +37,8 @@ namespace Zombie {
        for(auto it = operands.begin(); it != operands.end(); ++it) order += (*it)->orderOf(t);
        return order;
        }*/
+      
+      virtual TermSharedPtr deriveUntidy(const Variable &) const;
       
       const std::string latex() const {
         std::ostringstream os;

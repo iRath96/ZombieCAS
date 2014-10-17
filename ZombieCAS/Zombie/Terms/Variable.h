@@ -19,8 +19,10 @@ namespace Zombie {
       std::string name;
       Variable(std::string name) : name(name) {}
       
-      virtual void tidy() {}
+      virtual TermSharedPtr tidy(TermSharedPtr &self) { return self; }
       const std::string latex() const { return name; };
+      
+      virtual TermSharedPtr deriveUntidy(const Variable &) const;
       
       bool operator ==(const Term &other) const {
         if(dynamic_cast<const Variable *>(&other))

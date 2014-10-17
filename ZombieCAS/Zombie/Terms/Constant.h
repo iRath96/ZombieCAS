@@ -23,9 +23,10 @@ namespace Zombie {
       
       Constant(double v) : n(v) {}
       
+      virtual TermSharedPtr deriveUntidy(const Variable &v) const { return TermSharedPtr(new Constant(0)); }
       Constant orderOf(const Term *) const;
       
-      virtual void tidy() {}
+      virtual TermSharedPtr tidy(TermSharedPtr &self) { return self; }
       const std::string latex() const {
         std::ostringstream os;
         os << n;
@@ -33,16 +34,9 @@ namespace Zombie {
         return os.str();
       }
       
-#define def_op(op) bool operator op(double other) const { return this->n op other * this->d; }
-      def_op(==)
-      def_op(!=)
-      def_op(<)
-      def_op(<=)
-      def_op(>)
-      def_op(>=)
-#undef def_op
-      
-#define def_op(op) bool operator op(const Constant &other) const { return this->n * other.d op other.n * this->d; }
+#define def_op(op) \
+bool operator op(double other) const { return this->n op other * this->d; } \
+bool operator op(const Constant &other) const { return this->n * other.d op other.n * this->d; }
       def_op(==)
       def_op(!=)
       def_op(<)

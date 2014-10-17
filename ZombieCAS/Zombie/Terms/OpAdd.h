@@ -18,10 +18,12 @@ namespace Zombie {
     class OpAdd : public Operation {
     public:
       OpAdd() {}
-      OpAdd(TermVector o) : Operation(o) {}
       
-      OpAdd &operator +=(Term *other);
-      OpAdd &operator -=(Term *other);
+      template<class T>
+      OpAdd(T o) : Operation(o) {}
+      
+      void operator +=(TermSharedPtr other);
+      void operator -=(TermSharedPtr other);
       
       /*
        Constant orderOf(const Term *t) const {
@@ -35,6 +37,8 @@ namespace Zombie {
        
        return max;
        }*/
+      
+      virtual TermSharedPtr deriveUntidy(const Variable &) const;
       
       const std::string latex() const {
         std::ostringstream os;

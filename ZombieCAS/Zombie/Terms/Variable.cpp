@@ -7,3 +7,11 @@
 //
 
 #include "Variable.h"
+
+#include "Constant.h"
+
+using namespace Zombie::Terms;
+
+TermSharedPtr Variable::deriveUntidy(const Variable &var) const {
+  return TermSharedPtr(new Constant(*this == var ? 1 : 0));
+}

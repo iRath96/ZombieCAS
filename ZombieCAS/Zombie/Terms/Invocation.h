@@ -20,14 +20,22 @@ namespace Zombie {
     class Invocation : public Term {
     public:
       Invocation(const Definitions::Function *function, TermVector arguments) : function(function) {
+        // Attention: This will take ownership, so please
+        // pass only pointers to heap objects that you may
+        // not delete yourself.
+        
         for(auto it = arguments.begin(); it != arguments.end(); ++it)
-          this->arguments.push_back(std::unique_ptr<Term>(*it));
-      };
+          this->arguments.push_back(std::shared_ptr<Term>(*it));
+      }
+      
+      Invocation(const Definitions::Function *function, TermVectorShared arguments) : function(function), arguments(arguments) {}
       
       const Definitions::Function *function;
-      TermVectorManaged arguments;
+      TermVectorShared arguments;
       
-      virtual void tidy();
+      virtual TermSharedPtr deriveUntidy(const Variable &) const { return NULL; }
+      
+      virtual TermSharedPtr tidy(TermSharedPtr &self);
       const std::string latex() const {
         std::ostringstream os;
         os << function->name << "(";

@@ -13,12 +13,24 @@
 
 using namespace Zombie::Terms;
 
-OpAdd &OpAdd::operator+=(Term *other) {
-  operands.push_back(std::unique_ptr<Term>(other));
-  return *this;
-};
+void OpAdd::operator+=(TermSharedPtr other) {
+  operands.push_back(other);
+}
 
-OpAdd &OpAdd::operator-=(Term *other) {
-  operands.push_back(std::unique_ptr<Term>(new OpMultiply(TermVector { new Constant(-1), other })));
-  return *this;
-};
+void OpAdd::operator-=(TermSharedPtr other) {
+  operands.push_back(
+    TermSharedPtr(
+      new OpMultiply(TermVectorShared {
+        TermSharedPtr(new Constant(-1)),
+        other
+      })
+    )
+  );
+}
+
+TermSharedPtr OpAdd::deriveUntidy(const Variable &var) const {
+  OpAdd *result = new OpAdd();
+  for(auto it = operands.begin(); it != operands.end(); ++it)
+    *result += (*it)->deriveUntidy(var);
+  return TermSharedPtr(result);
+}

@@ -15,13 +15,47 @@
 
 using namespace Zombie::Terms;
 
-#define def_op(name, klass) \
-inline klass &Term::name(double v) { return name(new Constant(v)); } \
-inline klass &Term::name(Term *other)
-// Madness.
-def_op(multiply, OpMultiply) { return *new OpMultiply(TermVector { this, other }); };
-def_op(divide,   OpMultiply) { return *new OpMultiply(TermVector { this, new OpPow(TermVector { other, new Constant(-1) }) }); };
-def_op(add,      OpAdd)      { return *new OpAdd(TermVector { this, other }); };
-def_op(subtract, OpAdd)      { return *new OpAdd(TermVector { this, new OpMultiply(TermVector { new Constant(-1), other }) }); };
-def_op(pow,      OpPow)      { return *new OpPow(TermVector { this, other }); };
+#define def_op(name) \
+inline TermSharedPtr Term::name(TermSharedPtr &a, TermSharedPtr &b)
+def_op(multiply) {
+  return TermSharedPtr(new OpMultiply(TermVectorShared {
+    a,
+    b
+  }));
+};
+
+def_op(divide) {
+  return TermSharedPtr(new OpMultiply(TermVectorShared {
+    a,
+    TermSharedPtr(new OpPow(TermVectorShared {
+      b,
+      (TermSharedPtr)new Constant(-1)
+    }))
+  }));
+};
+
+def_op(add) {
+  return TermSharedPtr(new OpAdd(TermVectorShared {
+    a,
+    b
+  }));
+};
+
+def_op(subtract) {
+  return TermSharedPtr(new OpAdd(TermVectorShared {
+    a,
+    TermSharedPtr(new OpMultiply(TermVectorShared {
+      (TermSharedPtr)new Constant(-1),
+      b
+    }))
+  }));
+};
+
+def_op(pow) {
+  return TermSharedPtr(new OpPow(TermVectorShared {
+    a,
+    b
+  }));
+};
+
 #undef def_op

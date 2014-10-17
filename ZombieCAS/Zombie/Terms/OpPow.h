@@ -18,7 +18,9 @@ namespace Zombie {
     class OpPow : public Operation {
     public:
       OpPow() {}
-      OpPow(TermVector o) : Operation(o) {
+      
+      template<class T>
+      OpPow(T o) : Operation(o) {
         if(o.size() != 2) std::cout << "What?" << std::endl;
       }
       
@@ -29,7 +31,9 @@ namespace Zombie {
        return order;
        }*/
       
-      virtual void tidy();
+      virtual TermSharedPtr deriveUntidy(const Variable &) const { return NULL; }
+      
+      virtual TermSharedPtr tidy(TermSharedPtr &self);
       const std::string latex() const {
         std::ostringstream os;
         for(auto it = operands.begin(); it != operands.end(); ++it) {

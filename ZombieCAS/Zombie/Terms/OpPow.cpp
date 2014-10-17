@@ -13,11 +13,11 @@
 
 using namespace Zombie::Terms;
 
-void OpPow::tidy() {
-  if(operands.size() < 2) return;
+TermSharedPtr OpPow::tidy(TermSharedPtr &self) {
+  if(operands.size() < 2) return operands[0];
   
-  operands[0]->tidy();
-  operands[1]->tidy();
+  operands[0] = operands[0]->tidy(operands[0]);
+  operands[1] = operands[1]->tidy(operands[1]);
   
   bool baseConst = dynamic_cast<Constant *>(operands[0].get()) != NULL;
   bool expConst  = dynamic_cast<Constant *>(operands[1].get()) != NULL;
@@ -25,23 +25,24 @@ void OpPow::tidy() {
        if(baseConst && *(Constant *)(operands[0].get()) == 0) operands.pop_back();
   else if(baseConst && *(Constant *)(operands[0].get()) == 1) operands.pop_back();
   else if(expConst  && *(Constant *)(operands[1].get()) == 1) operands.pop_back();
-  else if(expConst  && *(Constant *)(operands[1].get()) == 0) {
-    operands.clear();
-    operands.push_back(std::unique_ptr<Term>(new Constant(1)));
-  } else if(dynamic_cast<OpPow *>(operands[0].get())) {
+  else if(expConst  && *(Constant *)(operands[1].get()) == 0)
+    return TermSharedPtr(new Constant(1));
+  else if(dynamic_cast<OpPow *>(operands[0].get())) {
     // Our base is a power, too.
     // Multiply both exponents and use the base of our base.
     
-    OpPow *base = (OpPow *)operands[0].release();
+    OpPow *base = (OpPow *)operands[0].get();
     
-    Term *exp = base->operands.size() == 1 ?
-      operands[1].release() :
-      new OpMultiply(TermVector { base->operands[1].release(), operands[1].release() });
-    (*exp).tidy();
+    TermSharedPtr exp = base->operands.size() == 1 ?
+      operands[1] :
+      TermSharedPtr(new OpMultiply(TermVectorShared { base->operands[1], operands[1] }));
+    exp = (*exp).tidy(exp);
     
-    operands[1] = std::unique_ptr<Term>(exp);
+    operands[1] = std::shared_ptr<Term>(exp);
     operands[0] = std::move(base->operands[0]);
     
-    tidy(); // TODO:2014-10-11:alex:Is this required? Could this yield infinite recursion?
+    return tidy(self); // TODO:2014-10-11:alex:Is this required? Could this yield infinite recursion?
   }
+  
+  return self;
 }

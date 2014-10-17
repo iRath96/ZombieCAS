@@ -20,15 +20,22 @@ namespace Zombie {
     protected:
       Operation() {}
       Operation(TermVector operands) {
+        // Attention: This will take ownership, so please
+        // pass only pointers to heap objects that you may
+        // not delete yourself.
+        
         for(auto it = operands.begin(); it != operands.end(); ++it)
-          this->operands.push_back(std::unique_ptr<Term>(*it));
-      };
+          this->operands.push_back(std::shared_ptr<Term>(*it));
+      }
+      
+      Operation(TermVectorShared operands) : operands(operands) {}
       
     public:
-      virtual void tidy();
+      virtual TermSharedPtr tidy(TermSharedPtr &self);
       virtual const std::string latex() const = 0;
+      virtual TermSharedPtr deriveUntidy(const Variable &) const = 0;
       
-      TermVectorManaged operands;
+      TermVectorShared operands;
       
       virtual bool operator ==(const Term &other) const;
     };

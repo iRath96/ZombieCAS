@@ -10,7 +10,8 @@
 
 using namespace Zombie::Terms;
 
-void Invocation::tidy() {
-  for(auto it = arguments.begin(); it != arguments.end(); ++it)
-    (*it)->tidy();
+TermSharedPtr Invocation::tidy(TermSharedPtr &self) {
+  for(int i = 0; i < arguments.size(); ++i)
+    arguments[i] = arguments[i]->tidy(arguments[i]);
+  return TermSharedPtr(this);
 }
