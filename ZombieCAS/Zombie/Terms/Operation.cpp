@@ -63,5 +63,19 @@ TermSharedPtr Operation::tidy(TermSharedPtr &self) {
 
 bool Operation::operator ==(const Term &other) const {
   if(typeid(*this) != typeid(other)) return false;
+  if(operands.size() != ((Operation *)&other)->operands.size()) return false;
+  
+  TermVectorShared op = ((Operation *)&other)->operands;
+  for(auto it = operands.begin(); it != operands.end(); ++it) {
+    for(auto it2 = op.begin(); it2 != op.end(); ++it2)
+      if(*(it->get()) == *(it2->get())) {
+        op.erase(it2);
+        goto findNext;
+      }
+    return false;
+  findNext:
+    continue;
+  }
+  
   return true;
 }

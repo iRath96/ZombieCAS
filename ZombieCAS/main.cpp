@@ -27,7 +27,7 @@ using namespace Zombie::Definitions;
 
 #define _bind(n) n(#n)
 int main(int argc, const char *argv[]) {
-  Parser::Tokenizer t("x^(x+1)/x");
+  Parser::Tokenizer t("(x-1)(x+1)");
   Parser::Parser p(t.tokens);
   
   //t.dump();
