@@ -57,6 +57,17 @@ TermSharedPtr OpPow::tidy(TermSharedPtr &self) {
     return tidy(self); // TODO:2014-10-11:alex:Is this required? Could this yield infinite recursion?
   }
   
+  // Expand multiplications in our base.
+  if(dynamic_cast<OpMultiply *>(operands[0].get())) {
+    OpMultiply *base = (OpMultiply *)operands[0].get();
+    OpMultiply *result = new OpMultiply();
+    
+    for(auto it = base->operands.begin(); it != base->operands.end(); ++it)
+      result->operands.push_back(Term::pow(*it, operands[1]));
+    
+    return TermSharedPtr(result);
+  }
+  
   return self;
 }
 
@@ -85,16 +96,6 @@ TermSharedPtr OpPow::expand(TermSharedPtr &self) {
   
   if(dynamic_cast<OpAdd *>(operands[1].get())) {
     // TODO:2014-10-18:alex:Do something awesome here.
-  }
-  
-  if(dynamic_cast<OpMultiply *>(operands[0].get())) {
-    OpMultiply *base = (OpMultiply *)operands[0].get();
-    OpMultiply *result = new OpMultiply();
-    
-    for(auto it = base->operands.begin(); it != base->operands.end(); ++it)
-      result->operands.push_back(Term::pow(*it, operands[1]));
-    
-    return TermSharedPtr(result);
   }
   
   if(dynamic_cast<OpAdd *>(operands[0].get()))

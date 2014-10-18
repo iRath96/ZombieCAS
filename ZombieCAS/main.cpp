@@ -29,7 +29,7 @@ using namespace Zombie::Definitions;
 
 #define _bind(n) n(#n)
 int main(int argc, const char *argv[]) {
-  Parser::Tokenizer t("(x+1)(x-1)");
+  Parser::Tokenizer t("(2^0.5)^3");
   Parser::Parser p(t.tokens);
   
   //t.dump();
