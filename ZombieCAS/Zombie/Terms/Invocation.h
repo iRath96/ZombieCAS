@@ -11,8 +11,10 @@
 
 #include <iostream>
 #include <sstream>
+#include <math.h>
 
 #include "Term.h"
+#include "Constant.h"
 #include "Function.h"
 
 namespace Zombie {
@@ -40,20 +42,54 @@ namespace Zombie {
           return Term::divide(derivate, divisor);
         }
         
+        if(function->name == "sin" || function->name == "cos") {
+          Definitions::Function *other = new Definitions::Function(function->name == "sin" ? "cos" : "sin");
+          TermSharedPtr derivate = arguments[0]->derive(var);
+          TermSharedPtr func = TermSharedPtr(new Invocation(other, TermVectorShared { arguments[0] }));
+          TermSharedPtr product = Term::multiply(derivate, func);
+          TermSharedPtr mOne = TermSharedPtr(new Constant(-1));
+          return function->name == "cos" ? Term::multiply(mOne, product) : product;
+        }
+        
         std::cout << "Ouch! Cannot derive function " << function->name << "!" << std::endl;
-        return NULL;
+        return TermSharedPtr(new Constant(0));
       }
       
       virtual TermSharedPtr tidy(TermSharedPtr &self);
-      const std::string latex() const {
+      
+      Number calculate(const Arguments &a) const {
+        Number arg0 = arguments[0]->calculate(a);
+#define native(n, func) if(function->name == n) return func(arg0);
+        native("ln", ::log);
+        native("sin", ::sin);
+        native("cos", ::cos);
+        native("tan", ::tan);
+#undef native
+        std::cout << "Ouch! Cannot calculate function " << function->name << "!" << std::endl;
+        return 0;
+      }
+      
+      const short sign() const { return +1; }
+      
+      const std::string toString() const {
         std::ostringstream os;
         os << function->name << "(";
+        for(auto it = arguments.begin(); it != arguments.end(); ++it) {
+          if(it != arguments.begin()) os << ", ";
+          os << (*it)->toString();
+        } os << ")";
+        return os.str();
+      }
+      
+      const std::string latex(const latex_ctx_t &ctx) const {
+        std::ostringstream os;
+        os << "\\operatorname{" << function->name << "}(";
         for(auto it = arguments.begin(); it != arguments.end(); ++it) {
           if(it != arguments.begin()) os << ", ";
           os << (*it)->latex();
         } os << ")";
         return os.str();
-      };
+      }
       
       bool operator ==(const Term &other) const {
         if(dynamic_cast<const Invocation *>(&other)) {

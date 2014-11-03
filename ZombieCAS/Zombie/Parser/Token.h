@@ -22,11 +22,11 @@ namespace Zombie {
       
       Token(char chr);
       void append(char chr) { text += chr; }
-      void invoke() { precedence = 5; }
+      void invoke() { precedence = 7; }
       
-      bool hasValue() const { return precedence == 0 || precedence == 5 || precedence == 8; }
+      bool hasValue() const { return precedence == 0 || precedence == 7 || precedence == 8; }
       bool isOperator() const { return precedence != 0; }
-      bool isInvocation() const { return precedence == 5; }
+      bool isInvocation() const { return precedence == 7; }
       
       bool isLiteral() const { return (text[0] >= '0' && text[0] <= '9') || text[0] == '.' || (text[0] == '-' && !precedence); }
     };

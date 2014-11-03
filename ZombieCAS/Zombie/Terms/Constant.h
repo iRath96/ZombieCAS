@@ -33,10 +33,23 @@ namespace Zombie {
         return self;
       }
       
-      const std::string latex() const {
+      Number calculate(const Arguments &) const { return n / d; }
+      
+      const short sign() const {
+        return n < 0 ? -1 : +1;
+      }
+      
+      const std::string toString() const {
         std::ostringstream os;
         os << n;
         if(d != 1) os << "/" << d;
+        return os.str();
+      }
+      
+      const std::string latex(const latex_ctx_t &) const {
+        std::ostringstream os;
+        if(d == 1) os << n;
+        else os << "\frac{" << n << "}{" << d << "}";
         return os.str();
       }
       

@@ -20,7 +20,12 @@ namespace Zombie {
       Variable(std::string name) : name(name) {}
       
       virtual TermSharedPtr tidy(TermSharedPtr &self) { return self; }
-      const std::string latex() const { return name; };
+      
+      Number calculate(const Arguments &a) const { return a.at(name); }
+      
+      const short sign() const { return +1; }
+      const std::string toString() const { return name; }
+      const std::string latex(const latex_ctx_t &ctx) const { return name; } // TODO:2014-11-03:alex:Verify that this is true.
       
       virtual TermSharedPtr deriveUntidy(const Variable &) const;
       

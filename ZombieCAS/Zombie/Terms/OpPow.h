@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <math.h>
 #include "Operation.h"
 
 namespace Zombie {
@@ -31,21 +32,43 @@ namespace Zombie {
        return order;
        }*/
       
-      virtual TermSharedPtr deriveUntidy(const Variable &) const;
+      TermSharedPtr deriveUntidy(const Variable &) const;
       
-      virtual TermSharedPtr tidy(TermSharedPtr &);
-      virtual TermSharedPtr expand(TermSharedPtr &);
+      TermSharedPtr tidy(TermSharedPtr &);
+      TermSharedPtr expand(TermSharedPtr &);
       
-      const std::string latex() const {
+      Number calculate(const Arguments &a) const {
+        return ::pow(operands[0]->calculate(a), operands[1]->calculate(a));
+      }
+      
+      const short sign() const {
+        return +1; // TODO:2014-11-03:alex:Think about this.
+      }
+      
+      const std::string toString() const {
         std::ostringstream os;
         for(auto it = operands.begin(); it != operands.end(); ++it) {
           if(it != operands.begin()) os << " ^ ";
           if(dynamic_cast<Operation *>(it->get()))
-            os << "(" << (*it)->latex() << ")";
+            os << "(" << (*it)->toString() << ")";
           else
-            os << (*it)->latex();
+            os << (*it)->toString();
         } return os.str();
-      };
+      }
+      
+      const std::string latex(const latex_ctx_t &ctx) const {
+        std::ostringstream os;
+        
+        if(ctx.parentalPrecedence >= kLP_POWER_BASE) os << "(";
+        
+        for(auto it = operands.begin(); it != operands.end(); ++it) {
+          if(it != operands.begin()) os << "^";
+          os << "{" << (*it)->latex((latex_ctx_t){ it == operands.begin() ? kLP_POWER_BASE : kLP_ROOT }) << "}";
+        }
+        
+        if(ctx.parentalPrecedence >= kLP_POWER_BASE) os << ")";
+        return os.str();
+      }
     };
   }
 }

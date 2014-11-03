@@ -35,9 +35,9 @@ TermSharedPtr OpPow::tidy(TermSharedPtr &self) {
     return c;
   }
   
-       if(baseConst && *(Constant *)(operands[0].get()) == 0) operands.pop_back();
-  else if(baseConst && *(Constant *)(operands[0].get()) == 1) operands.pop_back();
-  else if(expConst  && *(Constant *)(operands[1].get()) == 1) operands.pop_back();
+       if(baseConst && *(Constant *)(operands[0].get()) == 0) return operands[0];
+  else if(baseConst && *(Constant *)(operands[0].get()) == 1) return operands[0];
+  else if(expConst  && *(Constant *)(operands[1].get()) == 1) return operands[0];
   else if(expConst  && *(Constant *)(operands[1].get()) == 0)
     return TermSharedPtr(new Constant(1));
   else if(dynamic_cast<OpPow *>(operands[0].get())) {
@@ -101,7 +101,7 @@ TermSharedPtr OpPow::expand(TermSharedPtr &self) {
   if(dynamic_cast<OpAdd *>(operands[0].get()))
     if(dynamic_cast<Constant *>(operands[1].get()))
       if(((Constant *)operands[1].get())->d == 1 && ((Constant *)operands[1].get())->n <= 4) {
-        int c = ((Constant *)operands[1].get())->n;
+        // int c = ((Constant *)operands[1].get())->n;
         // TODO:2014-10-18:alex:Do something awesome here.
       }
   

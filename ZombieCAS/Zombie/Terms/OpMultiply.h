@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sstream>
 #include "Operation.h"
+#include "Constant.h"
 
 namespace Zombie {
   namespace Terms {
@@ -42,16 +43,43 @@ namespace Zombie {
       virtual TermSharedPtr expand(TermSharedPtr &);
       virtual TermSharedPtr deriveUntidy(const Variable &) const;
       
-      const std::string latex() const {
+      Number calculate(const Arguments &a) const {
+        Number result = 1;
+        for(auto it = operands.begin(); it != operands.end(); ++it) result *= (*it)->calculate(a);
+        return result;
+      }
+      
+      const short sign() const {
+        short sign = +1;
+        for(auto it = operands.begin(); it != operands.end(); ++it) sign *= (*it)->sign();
+        return sign;
+      }
+      
+      const std::string toString() const {
         std::ostringstream os;
         for(auto it = operands.begin(); it != operands.end(); ++it) {
           if(it != operands.begin()) os << " * ";
           if(dynamic_cast<const Operation *>(it->get()))
-            os << "(" << (*it)->latex() << ")";
+            os << "(" << (*it)->toString() << ")";
           else
-            os << (*it)->latex();
-        } return os.str();
-      };
+            os << (*it)->toString();
+        }
+        
+        return os.str();
+      }
+      
+      const std::string latex(const latex_ctx_t &ctx) const {
+        std::ostringstream osC, osNC;
+        if(ctx.parentalPrecedence > kLP_MULTIPLY) osC << "(";
+        for(auto it = operands.begin(); it != operands.end(); ++it) {
+          //if(it != operands.begin()) os << "*";
+          (dynamic_cast<Constant *>(it->get()) ? osC : osNC) << (*it)->latex((latex_ctx_t){ kLP_MULTIPLY });
+        }
+        
+        if(ctx.parentalPrecedence > kLP_MULTIPLY) osNC << "(";
+        if(osC.str() == "-1") return "-" + osNC.str();
+        return osC.str() + osNC.str();
+      }
     };
   }
 }

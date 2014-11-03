@@ -32,8 +32,13 @@ namespace Zombie {
       
     public:
       virtual TermSharedPtr tidy(TermSharedPtr &self);
-      virtual const std::string latex() const = 0;
       virtual TermSharedPtr deriveUntidy(const Variable &) const = 0;
+      
+      virtual Number calculate(const Arguments &) const = 0;
+      
+      virtual const short sign() const = 0;
+      virtual const std::string toString() const = 0;
+      virtual const std::string latex(const latex_ctx_t &) const = 0;
       
       TermVectorShared operands;
       

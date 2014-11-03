@@ -91,7 +91,7 @@ Tokenizer::Tokenizer(std::string input) {
     tokens.push_back(memory);
     needsMul = memory->precedence == 0 || memory->text == ")";
     
-    canBeUnary = !memory->hasValue();
+    canBeUnary = memory->text == "(" || memory->text == "^";
     memory = NULL;
   }
 }

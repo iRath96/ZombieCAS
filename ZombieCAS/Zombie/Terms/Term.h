@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 
 namespace Zombie {
   namespace Terms {
@@ -22,6 +23,23 @@ namespace Zombie {
     class Variable;
     
     class Term;
+    
+    typedef enum {
+      kLP_ROOT = 0,
+      kLP_ADD,
+      kLP_MULTIPLY,
+      kLP_POWER_BASE
+    } latex_precedence_t;
+    
+    typedef struct __class {
+      latex_precedence_t parentalPrecedence = kLP_ROOT;
+      bool negate = false;
+      
+      __class(latex_precedence_t p = kLP_ROOT, bool n = false) : parentalPrecedence(p), negate(n) {}
+    } latex_ctx_t;
+    
+    typedef double Number;
+    typedef std::map<std::string, Number> Arguments;
     
     typedef Term *TermPtr;
     typedef std::shared_ptr<Term> TermSharedPtr;
@@ -65,7 +83,13 @@ static TermSharedPtr name(TermSharedPtr &a, TermSharedPtr &b); \
       virtual TermSharedPtr tidy(TermSharedPtr &self) = 0;
       virtual TermSharedPtr simplify(TermSharedPtr &self) { return self; }
       virtual TermSharedPtr expand(TermSharedPtr &self) { return self; }
-      virtual const std::string latex() const = 0;
+      
+      virtual Number calculate(const Arguments &) const = 0;
+      
+      virtual const short sign() const = 0;
+      virtual const std::string toString() const = 0;
+      virtual const std::string latex(const latex_ctx_t &) const = 0;
+      const std::string latex() { return latex((latex_ctx_t){}); }
       
       virtual bool operator !=(const Term &other) { return !(*this == other); }
       virtual bool operator ==(const Term &other) const = 0;

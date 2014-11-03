@@ -44,8 +44,8 @@ void Parser::buildRPN(const std::vector<Token *> &tokens) {
     }
     
     while(!stack.empty() && (token->text == ")" || stack.top()->text != "(") && (
-                                                                                 stack.top()->precedence >  token->precedence ||
-                                                                                 (stack.top()->precedence == token->precedence && !token->rightToLeft))) {
+      stack.top()->precedence >  token->precedence ||
+     (stack.top()->precedence == token->precedence && !token->rightToLeft))) {
       if(token->text == ")" && stack.top()->text == "(") {
         stack.pop();
         break;
@@ -60,9 +60,6 @@ void Parser::buildRPN(const std::vector<Token *> &tokens) {
     rpn.push_back(stack.top());
     stack.pop();
   }
-  
-  // And now an abstract syntax tree
-  
 }
 
 TermSharedPtr Parser::buildAST(bool tidy) const {
@@ -81,8 +78,8 @@ TermSharedPtr Parser::buildAST(bool tidy) const {
       if(token->isInvocation()) {
         /* if(stack.empty()); */ // TODO:2014-10-11:alex:Throw an exception here.
         stack_element_t e = stack.top(); stack.pop();
-        if(!e.isVector) e = { (void *)new TermVector { (Term *)e.element }, true };
-        result = { (void *)new Invocation(new Function(token->text), *(TermVector *)e.element), false };
+        if(!e.isVector) e = (stack_element_t){ (void *)new TermVector { (Term *)e.element }, true };
+        result = (stack_element_t){ (void *)new Invocation(new Function(token->text), *(TermVector *)e.element), false };
       } else {
         /* if(stack.size() < 2); */ // TODO:2014-10-11:alex:Throw an exception here.
         
@@ -92,11 +89,11 @@ TermSharedPtr Parser::buildAST(bool tidy) const {
         switch(token->text[0]) {
           case ',':
             if(a.isVector) result = a;
-            else result = { (void *)new TermVector { (Term *)a.element }, true };
+            else result = (stack_element_t){ (void *)new TermVector { (Term *)a.element }, true };
             /* if(b.isVector); */ // TODO:2014-10-11:alex:Throw an exception here.
             ((TermVector *)result.element)->push_back((Term *)b.element);
             break;
-#define operation(klass) result = { (void *)new klass(TermVector { (Term *)a.element, (Term *)b.element }), false }
+#define operation(klass) result = (stack_element_t){ (void *)new klass(TermVector { (Term *)a.element, (Term *)b.element }), false }
           case '*': operation(OpMultiply); break;
           case '^': operation(OpPow); break;
           case '+': operation(OpAdd); break;

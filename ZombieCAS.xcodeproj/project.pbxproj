@@ -38,6 +38,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FA3645251A07D9FA004EA41A /* assembly.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = assembly.cpp; sourceTree = "<group>"; };
+		FA3645281A07E031004EA41A /* jsapi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsapi.cpp; sourceTree = "<group>"; };
 		FA39C75C19F1D0C4004E9B3F /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
 		FA39C75D19F1D0C4004E9B3F /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		FA77C07C19E967F50053F5F9 /* Term.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Term.cpp; sourceTree = "<group>"; };
@@ -111,6 +113,8 @@
 			children = (
 				FAD9A32519E9347A00D5EB31 /* Zombie */,
 				FAD9A31C19E6FDE900D5EB31 /* main.cpp */,
+				FA3645281A07E031004EA41A /* jsapi.cpp */,
+				FA3645251A07D9FA004EA41A /* assembly.cpp */,
 				FAD9A31E19E6FDE900D5EB31 /* ZombieCAS.1 */,
 			);
 			path = ZombieCAS;

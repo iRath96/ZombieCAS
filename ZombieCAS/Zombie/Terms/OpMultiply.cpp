@@ -48,14 +48,14 @@ TermSharedPtr OpMultiply::simplify(TermSharedPtr &self) {
   
   operands.clear();
   
-  std::cout << "= start ===" << std::endl;
+  //std::cout << "= start ===" << std::endl;
   
   for(auto it = exponents.begin(); it != exponents.end(); ++it) {
     TermSharedPtr base = it->first.ptr;
     TermSharedPtr exp = TermSharedPtr(it->second);
     exp = exp->tidy(exp);
     
-    std::cout << base->latex() << " => " << exp->latex() << std::endl;
+    //std::cout << base->latex() << " => " << exp->latex() << std::endl;
     
     if(dynamic_cast<Constant *>(exp.get())) {
       if(*(Constant *)exp.get() == 1) {

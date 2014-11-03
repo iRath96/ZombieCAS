@@ -41,16 +41,41 @@ namespace Zombie {
       virtual TermSharedPtr simplify(TermSharedPtr &);
       virtual TermSharedPtr deriveUntidy(const Variable &) const;
       
-      const std::string latex() const {
+      Number calculate(const Arguments &a) const {
+        Number result = 0;
+        for(auto it = operands.begin(); it != operands.end(); ++it) result += (*it)->calculate(a);
+        return result;
+      }
+      
+      const short sign() const {
+        for(auto it = operands.begin(); it != operands.end(); ++it) if((*it)->sign() == +1) return +1;
+        return -1;
+      }
+      
+      const std::string toString() const {
         std::ostringstream os;
         for(auto it = operands.begin(); it != operands.end(); ++it) {
           if(it != operands.begin()) os << " + ";
           if(dynamic_cast<const Operation *>(it->get()))
-            os << "(" << (*it)->latex() << ")";
+            os << "(" << (*it)->toString() << ")";
           else
-            os << (*it)->latex();
+            os << (*it)->toString();
         } return os.str();
-      };
+      }
+      
+      const std::string latex(const latex_ctx_t &ctx) const {
+        std::ostringstream osP, osN;
+        
+        if(ctx.parentalPrecedence > kLP_ADD) osP << "(";
+        
+        for(auto it = operands.begin(); it != operands.end(); ++it) {
+          if(it != operands.begin()) osP << "+";
+          osP << (*it)->latex((latex_ctx_t){ kLP_ADD });
+        }
+        
+        if(ctx.parentalPrecedence > kLP_ADD) osP << ")";
+        return osP.str();
+      }
     };
   }
 }
