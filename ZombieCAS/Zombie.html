@@ -44,11 +44,11 @@
       
       input#formula {
         border: 1px solid #ddd;
-        border-bottom-color: #bbb;
+        border-bottom-color: #c7c7c7;
         border-radius: 3px;
         padding: 4px 8px;
         font: inherit;
-        box-shadow: 0 1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 1px rgba(0, 0, 0, 0.03);
         margin-bottom: 10px;
         width: 600px;
         outline: none;
@@ -107,6 +107,28 @@
       
       .guidat {
         -webkit-user-select: none;
+      }
+      
+      span.example {
+        text-align: center;
+        display: inline-block;
+        border: 1px solid #aaa;
+        color: #bbb;
+        font-size: 0.7em;
+        line-height: 16px;
+        font-weight: bold;
+        border-radius: 16px;
+        width: 16px;
+        height: 16px;
+        position: relative;
+        top: -1px;
+        -webkit-transition: 0.1s ease all;
+        margin-right: 2px;
+      }
+      
+      span.example:hover {
+        cursor: pointer;
+        background-color: white;
       }
       
     /*]]>*/
@@ -240,7 +262,12 @@
       var pixelScale = 2;
       var canvas, gtx;
       
-      var formula = "sin(x)*cos(x)*x";//-ln(cos(x*0))";
+      var examples = [
+        "arcsin(a*sin(x))+arccos((b-a)*cos(x))-pi/2",
+        "a*x*sin(x)*cos(x)"
+      ];
+      
+      var formula = examples[0];
       var yViewOffset = 1;
       
       var params = {
@@ -249,6 +276,7 @@
         depth: 3,
         
         a: 0,
+        b: 0,
         step: 0.01,
         
         xOrigin: 400,
@@ -301,7 +329,21 @@
       }
       
       window.addEventListener('load', function() {
+        var e = document.querySelector('span#examples');
+        examples.forEach(function(example, i) {
+          var s = document.createElement('span');
+          s.textContent = i + 1;
+          s.className = 'example';
+          s.addEventListener('click', function() {
+            document.querySelector('input#formula').value = example;
+            parse(example);
+          });
+          
+          e.appendChild(s);
+        });
+        
         document.title = params.title;
+        document.querySelector('input#formula').value = formula;
         
         canvas = document.querySelector('canvas#const');
         gtx = canvas.getContext('2d');
@@ -315,7 +357,7 @@
         
         var gui = new DAT.GUI({
         //width: 300,
-          height: 6 * 32 - 1
+          height: 7 * 32 - 1
         });
         
         gui.add(params, 'tangentOrder', 1, 16, 1).name('Tangentenord.').onFinishChange(function() {
@@ -324,26 +366,33 @@
         
         gui.add(params, 'depth', 0, 3, 1).name('Tiefe').onChange(function() { redraw(); });
         
-        stepper = gui.add(params, 'a', 0, 1).onChange(function(e) {
-          var a = Module.getParam('a');
-          var b = params.a;
-          
-          var min = Math.min(a, b);
-          var max = Math.max(a, b);
-          
-          if(params.trace)
-            for(; min <= max; min += params.step) {
-              Module.setParam('a', min);
-              redraw();
-            }
-          
-          Module.setParam('a', params.a);
-          if(!params.trace) redraw();
-        }).step(params.step).name('Parameter a');
+        var steppers = [];
+        var names = [ 'a', 'b' ];
+        for(var i = 0; i < names.length; ++i) {
+          (function(name) {
+            var stepper = gui.add(params, name, 0, 1).onChange(function(e) {
+              var a = Module.getParam(name);
+              var b = params.a;
+              
+              var min = Math.min(a, b);
+              var max = Math.max(a, b);
+              
+              if(params.trace)
+                for(; min <= max; min += params.step) {
+                  Module.setParam(name, min);
+                  redraw();
+                }
+              
+              Module.setParam(name, params[name]);
+              if(!params.trace) redraw();
+            }).step(params.step).name('Parameter ' + name);
+            steppers.push(stepper);
+          })(names[i]);
+        }
         
         gui.add(params, 'trace').name('Spur').onChange(function() { redraw(); });
         gui.add(params, 'step', [ 0.25, 0.1, 0.05, 0.01, 0.001 ]).name('Schritt').onChange(function(e) {
-          stepper.step(e);
+          for(var i = 0; i < steppers.length; ++i) steppers[i].step(e);
         });
         
         gui.add(params, 'clear').name("L&ouml;schen");
@@ -471,6 +520,7 @@
           
           Module.create();
           Module.setParam("a", 0);
+          Module.setParam("b", 0);
           
           parse(formula);
         }, 400);
@@ -496,10 +546,17 @@
         var px = 0, py = 0;
         
         gtx.beginPath();
+        var wasNaN = false;
         
-        for(var x = -2; x < W; x += STEP) {
+        for(var x = -STEP; x <= W; x += STEP) {
           var fx = (x - CX) * XS;
           var fy = Module.calculateWithX(fx);
+          
+          if(isNaN(fy) && !wasNaN) {
+            gtx.stroke();
+            gtx.closePath();
+            gtx.beginPath();
+          } wasNaN = isNaN(fy);
           
           var y = CY - fy / YS;
           
@@ -507,13 +564,13 @@
           need += s / STEP + STEP;
           
           if(need >= 1) {
-            if(need > 2) need = 2; // TODO:2014-11-05:alex:Fix this. It does some weird rendering bugs.
+            if(need > 2) need = need > 40 ? 4 : 2; // TODO:2014-11-05:alex:Fix this. It does some weird rendering bugs.
             
             var mstep = 1 / need;
             for(var mx = lx; mx < x; mx += mstep) {
               var my = CY - Module.calculateWithX((mx - CX) * XS) / YS;
               
-              if(Math.abs(my - py) > 10.0) gtx.moveTo(mx, my - 0.5);
+              if(Math.abs(my - py) > 20.0) gtx.moveTo(mx, my - 0.5);
               gtx.lineTo(mx, my);
               
               px = mx; py = my;
@@ -591,7 +648,8 @@
   </head>
   <body>
     <article>
-      <input id="formula" type="text" value="x*sin(x)*cos(x)" />
+      <input id="formula" type="text" value="Wird geladen..." />&nbsp;
+      <span id="examples"></span>
       <div id="math">
         Eingabe: ${}$<br />
         d/dx: ${}$<br />

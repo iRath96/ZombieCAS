@@ -25,7 +25,10 @@ namespace Zombie {
       
       const short sign() const { return +1; }
       const std::string toString() const { return name; }
-      const std::string latex(const latex_ctx_t &ctx) const { return name; } // TODO:2014-11-03:alex:Verify that this is true.
+      const std::string latex(const latex_ctx_t &ctx) const {
+        if(name == "pi") return "\\" + name;
+        return name; // TODO:2014-11-03:alex:Verify that this is true.
+      }
       
       virtual TermSharedPtr deriveUntidy(const Variable &) const;
       

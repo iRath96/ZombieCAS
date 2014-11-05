@@ -152,3 +152,45 @@ TermSharedPtr OpPow::expand(TermSharedPtr &self) {
   
   return self;
 }
+
+const std::string OpPow::latex(const latex_ctx_t &ctx) const {
+  std::ostringstream os;
+  
+  bool negateExponent = ctx.negateExponent;
+  bool frac = false;
+  
+  if(ctx.negate) os << "-";
+  if(ctx.parentalPrecedence < kLP_MULTIPLY && operands[1]->sign() == -1) {
+    os << "\\frac{1}{";
+    frac = negateExponent = true;
+  }
+  
+  if(ctx.parentalPrecedence >= kLP_POWER_BASE) os << "(";
+  if(negateExponent &&
+     dynamic_cast<Constant *>(operands[1].get()) && *(Constant *)(operands[1].get()) == -1) {
+    os << operands[0]->latex();
+  } else if(dynamic_cast<Constant *>(operands[1].get()) && ((Constant *)(operands[1].get()))->d != 1) {
+    // The exponent is a fraction, so let's use a root here.
+    // TODO:2014-11-05:alex:Recognize fractions that are not 'Constant'
+    
+    Constant *exp = (Constant *)(operands[1].get());
+    auto n = exp->n * (negateExponent ? -1 : +1);
+    os << "\\sqrt";
+    if(exp->d != 2) os << "[" << exp->d << "]";
+    os << "{{" << operands[0]->latex({ n == 1 ? kLP_ROOT : kLP_POWER_BASE }) << "}";
+    if(n != 1) os << "^{" << n << "}";
+    os << "}";
+  } else
+    for(auto it = operands.begin(); it != operands.end(); ++it) {
+      if(it != operands.begin()) os << "^";
+      os << "{" << (*it)->latex((latex_ctx_t){
+        it == operands.begin() ? kLP_POWER_BASE : kLP_ROOT,
+        it != operands.begin() && negateExponent
+      }) << "}";
+    }
+  
+  if(ctx.parentalPrecedence >= kLP_POWER_BASE) os << ")";
+  if(frac) os << "}";
+  
+  return os.str();
+}

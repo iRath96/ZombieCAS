@@ -79,7 +79,7 @@ void expand() { ast->expand(); }
 std::string latex() { return ast->latex(); }
 std::string toString() { return ast->toString(); }
 
-Arguments args {{ "x", 0.0 }};
+Arguments args {{ "x", 0.0 }, { "pi", M_PI }, { "e", M_E }};
 double calculateWithX(double x) {
   args.find("x")->second = x;
   return ast->term->calculate(args);
@@ -187,7 +187,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 #else
 int main(int argc, const char *argv[]) {
   create();
-  parse("x^(-a-b)*a");
+  parse("a^0.5");
   std::cout << ast->term->latex({ kLP_ROOT, true }) << std::endl;
   order(1);
   std::cout << latex() << std::endl;

@@ -105,28 +105,37 @@ const std::string OpMultiply::latex(const latex_ctx_t &ctx) const {
   std::ostringstream osNominator, osDenominator;
   std::ostringstream osConstN, osConstD;
   
+  int nCount = 0, dCount = 0;
+  
   latex_ctx_t localCtx(kLP_MULTIPLY);
   for(auto it = operands.begin(); it != operands.end(); ++it) {
     localCtx.negate = (*it)->sign() == -1;
     if(dynamic_cast<OpPow *>(it->get()))
       if((localCtx.negateExponent = ((OpPow *)it->get())->operands[1]->sign() == -1)) {
         osDenominator << (*it)->latex(localCtx);
+        ++dCount;
+        
         continue;
       }
     
     if(dynamic_cast<Constant *>(it->get())) {
       Constant *c = (Constant *)it->get();
       if(!osConstN.str().empty()) osConstN << "\\cdot";
+      
       osConstN << (c->n < 0 ? -c->n : c->n);
+      ++nCount;
+      
       if(c->d != 1) {
         if(!osConstD.str().empty()) osConstD << "\\cdot";
         osConstD << c->d;
+        ++dCount;
       }
       
       continue;
     }
     
     osNominator << (*it)->latex(localCtx);
+    ++nCount;
   }
   
   bool needsMinus = (sign() == -1) != ctx.negate;
@@ -136,10 +145,23 @@ const std::string OpMultiply::latex(const latex_ctx_t &ctx) const {
   if(needsMinus) osFinal << "-";
   if(ctx.parentalPrecedence > kLP_MULTIPLY) osFinal << "(";
   
-  if(osConstN.str() == "1" && !osNominator.str().empty()) osConstN.str("");
+  if(osConstN.str() == "1" && !osNominator.str().empty()) {
+    osConstN.str("");
+    --nCount;
+  }
   
   osConstN << osNominator.str();
   osConstD << osDenominator.str();
+  
+  if(nCount == 1 && osConstN.str()[0] == '(')
+    // Imagine we have a product like (a+b)/2.
+    // The sum would have brackets in our fractions if we do not remove them!
+    // We can do so if there is only one element in the nominator.
+    osConstN.str(osConstN.str().substr(1, osConstN.str().length() - 2));
+  
+  if(dCount == 1 && osConstD.str()[0] == '(')
+    // Same for the denominator.
+    osConstD.str(osConstD.str().substr(1, osConstD.str().length() - 2));
   
   if(osConstN.str().empty()) osConstN << "1";
   if(osConstD.str().empty())

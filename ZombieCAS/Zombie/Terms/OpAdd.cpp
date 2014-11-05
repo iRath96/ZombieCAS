@@ -44,8 +44,6 @@ TermSharedPtr OpAdd::simplify(TermSharedPtr &self) {
 const std::string OpAdd::latex(const latex_ctx_t &ctx) const {
   std::ostringstream osP, osN;
   
-  if(ctx.parentalPrecedence > kLP_ADD) osP << "(";
-  
   for(auto it = operands.begin(); it != operands.end(); ++it) {
     bool isNegative = (*it)->sign() == -1;
     std::ostringstream &os = isNegative ? osN : osP;
@@ -56,6 +54,5 @@ const std::string OpAdd::latex(const latex_ctx_t &ctx) const {
   
   osP << osN.str();
   
-  if(ctx.parentalPrecedence > kLP_ADD) osP << ")";
-  return osP.str();
+  return ctx.parentalPrecedence > kLP_ADD ? "(" + osP.str() + ")" : osP.str();
 }

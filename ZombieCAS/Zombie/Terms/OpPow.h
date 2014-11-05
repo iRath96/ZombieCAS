@@ -58,36 +58,7 @@ namespace Zombie {
         } return os.str();
       }
       
-      const std::string latex(const latex_ctx_t &ctx) const {
-        std::ostringstream os;
-        
-        bool negateExponent = ctx.negateExponent;
-        bool frac = false;
-        
-        if(ctx.negate) os << "-";
-        if(ctx.parentalPrecedence < kLP_MULTIPLY && operands[1]->sign() == -1) {
-          os << "\\frac{1}{";
-          frac = negateExponent = true;
-        }
-        
-        if(ctx.parentalPrecedence >= kLP_POWER_BASE) os << "(";
-        if(negateExponent &&
-           dynamic_cast<Constant *>(operands[1].get()) && *(Constant *)(operands[1].get()) == -1) {
-          os << operands[0]->latex();
-        } else
-          for(auto it = operands.begin(); it != operands.end(); ++it) {
-            if(it != operands.begin()) os << "^";
-            os << "{" << (*it)->latex((latex_ctx_t){
-              it == operands.begin() ? kLP_POWER_BASE : kLP_ROOT,
-              it != operands.begin() && negateExponent
-            }) << "}";
-          }
-        
-        if(ctx.parentalPrecedence >= kLP_POWER_BASE) os << ")";
-        if(frac) os << "}";
-        
-        return os.str();
-      }
+      const std::string latex(const latex_ctx_t &ctx) const;
       
       TermSharedPtr simplify(TermSharedPtr &);
     };
