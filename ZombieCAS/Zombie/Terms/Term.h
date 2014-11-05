@@ -34,6 +34,7 @@ namespace Zombie {
     typedef struct __class {
       latex_precedence_t parentalPrecedence = kLP_ROOT;
       bool negate = false;
+      bool negateExponent = false;
       
       __class(latex_precedence_t p = kLP_ROOT, bool n = false) : parentalPrecedence(p), negate(n) {}
     } latex_ctx_t;

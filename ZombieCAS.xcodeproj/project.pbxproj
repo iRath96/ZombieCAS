@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA36452E1A0A168C004EA41A /* jsapi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA3645281A07E031004EA41A /* jsapi.cpp */; };
 		FA39C75E19F1D0C4004E9B3F /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA39C75C19F1D0C4004E9B3F /* Node.cpp */; };
 		FA77C07E19E967F50053F5F9 /* Term.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C07C19E967F50053F5F9 /* Term.cpp */; };
 		FA77C08119E9691C0053F5F9 /* Operation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C07F19E9691C0053F5F9 /* Operation.cpp */; };
@@ -17,7 +18,6 @@
 		FA77C09019E96A210053F5F9 /* Variable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C08E19E96A210053F5F9 /* Variable.cpp */; };
 		FA77C09319E96A410053F5F9 /* Invocation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C09119E96A410053F5F9 /* Invocation.cpp */; };
 		FA77C09719E96D090053F5F9 /* Function.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA77C09519E96D090053F5F9 /* Function.cpp */; };
-		FAD9A31D19E6FDE900D5EB31 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAD9A31C19E6FDE900D5EB31 /* main.cpp */; };
 		FAD9A31F19E6FDE900D5EB31 /* ZombieCAS.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = FAD9A31E19E6FDE900D5EB31 /* ZombieCAS.1 */; };
 		FAD9A32919E934F800D5EB31 /* Tokenizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAD9A32719E934F800D5EB31 /* Tokenizer.cpp */; };
 		FAD9A32C19E9354500D5EB31 /* Token.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FAD9A32A19E9354500D5EB31 /* Token.cpp */; };
@@ -225,7 +225,7 @@
 				FAD9A32C19E9354500D5EB31 /* Token.cpp in Sources */,
 				FA77C09719E96D090053F5F9 /* Function.cpp in Sources */,
 				FA77C08719E969960053F5F9 /* OpAdd.cpp in Sources */,
-				FAD9A31D19E6FDE900D5EB31 /* main.cpp in Sources */,
+				FA36452E1A0A168C004EA41A /* jsapi.cpp in Sources */,
 				FA77C08A19E969E30053F5F9 /* OpMultiply.cpp in Sources */,
 				FA77C09319E96A410053F5F9 /* Invocation.cpp in Sources */,
 				FA77C08419E9696C0053F5F9 /* Constant.cpp in Sources */,

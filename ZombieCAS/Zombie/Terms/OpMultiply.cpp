@@ -100,3 +100,53 @@ TermSharedPtr OpMultiply::expand(TermSharedPtr &self) {
   
   return TermSharedPtr(add);
 }
+
+const std::string OpMultiply::latex(const latex_ctx_t &ctx) const {
+  std::ostringstream osNominator, osDenominator;
+  std::ostringstream osConstN, osConstD;
+  
+  latex_ctx_t localCtx(kLP_MULTIPLY);
+  for(auto it = operands.begin(); it != operands.end(); ++it) {
+    localCtx.negate = (*it)->sign() == -1;
+    if(dynamic_cast<OpPow *>(it->get()))
+      if((localCtx.negateExponent = ((OpPow *)it->get())->operands[1]->sign() == -1)) {
+        osDenominator << (*it)->latex(localCtx);
+        continue;
+      }
+    
+    if(dynamic_cast<Constant *>(it->get())) {
+      Constant *c = (Constant *)it->get();
+      if(!osConstN.str().empty()) osConstN << "\\cdot";
+      osConstN << (c->n < 0 ? -c->n : c->n);
+      if(c->d != 1) {
+        if(!osConstD.str().empty()) osConstD << "\\cdot";
+        osConstD << c->d;
+      }
+      
+      continue;
+    }
+    
+    osNominator << (*it)->latex(localCtx);
+  }
+  
+  bool needsMinus = (sign() == -1) != ctx.negate;
+  
+  std::ostringstream osFinal;
+  
+  if(needsMinus) osFinal << "-";
+  if(ctx.parentalPrecedence > kLP_MULTIPLY) osFinal << "(";
+  
+  if(osConstN.str() == "1" && !osNominator.str().empty()) osConstN.str("");
+  
+  osConstN << osNominator.str();
+  osConstD << osDenominator.str();
+  
+  if(osConstN.str().empty()) osConstN << "1";
+  if(osConstD.str().empty())
+    osFinal << osConstN.str();
+  else
+    osFinal << "\\frac{" << osConstN.str() << "}{" << osConstD.str() << "}";
+  
+  if(ctx.parentalPrecedence > kLP_MULTIPLY) osFinal << ")";
+  return osFinal.str();
+}

@@ -68,18 +68,7 @@ namespace Zombie {
         return os.str();
       }
       
-      const std::string latex(const latex_ctx_t &ctx) const {
-        std::ostringstream osC, osNC;
-        if(ctx.parentalPrecedence > kLP_MULTIPLY) osC << "(";
-        for(auto it = operands.begin(); it != operands.end(); ++it) {
-          //if(it != operands.begin()) os << "*";
-          (dynamic_cast<Constant *>(it->get()) ? osC : osNC) << (*it)->latex((latex_ctx_t){ kLP_MULTIPLY });
-        }
-        
-        if(ctx.parentalPrecedence > kLP_MULTIPLY) osNC << "(";
-        if(osC.str() == "-1") return "-" + osNC.str();
-        return osC.str() + osNC.str();
-      }
+      const std::string latex(const latex_ctx_t &ctx) const;
     };
   }
 }

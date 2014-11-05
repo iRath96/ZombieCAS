@@ -35,27 +35,8 @@ namespace Zombie {
       const Definitions::Function *function;
       TermVectorShared arguments;
       
-      virtual TermSharedPtr deriveUntidy(const Variable &var) const {
-        if(function->name == "ln") {
-          TermSharedPtr derivate = arguments[0]->derive(var);
-          TermSharedPtr divisor = arguments[0];
-          return Term::divide(derivate, divisor);
-        }
-        
-        if(function->name == "sin" || function->name == "cos") {
-          Definitions::Function *other = new Definitions::Function(function->name == "sin" ? "cos" : "sin");
-          TermSharedPtr derivate = arguments[0]->derive(var);
-          TermSharedPtr func = TermSharedPtr(new Invocation(other, TermVectorShared { arguments[0] }));
-          TermSharedPtr product = Term::multiply(derivate, func);
-          TermSharedPtr mOne = TermSharedPtr(new Constant(-1));
-          return function->name == "cos" ? Term::multiply(mOne, product) : product;
-        }
-        
-        std::cout << "Ouch! Cannot derive function " << function->name << "!" << std::endl;
-        return TermSharedPtr(new Constant(0));
-      }
-      
-      virtual TermSharedPtr tidy(TermSharedPtr &self);
+      TermSharedPtr deriveUntidy(const Variable &) const;
+      TermSharedPtr tidy(TermSharedPtr &self);
       
       Number calculate(const Arguments &a) const {
         Number arg0 = arguments[0]->calculate(a);
@@ -64,6 +45,9 @@ namespace Zombie {
         native("sin", ::sin);
         native("cos", ::cos);
         native("tan", ::tan);
+        native("arcsin", ::asin);
+        native("arccos", ::acos);
+        native("arctan", ::atan);
 #undef native
         std::cout << "Ouch! Cannot calculate function " << function->name << "!" << std::endl;
         return 0;
@@ -94,10 +78,11 @@ namespace Zombie {
       bool operator ==(const Term &other) const {
         if(dynamic_cast<const Invocation *>(&other)) {
           const Invocation *o = (const Invocation *)&other;
-          if(o->function != function) return false;
+          if(*o->function != *function) return false;
           if(o->arguments.size() != arguments.size()) return false;
           for(unsigned long i = 0, j = arguments.size(); i < j; ++i)
-            if(o->arguments[i] != arguments[i]) return false;
+            if(*o->arguments[i] != *arguments[i])
+              return false;
           return true;
         } return false;
       }

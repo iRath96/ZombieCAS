@@ -20,6 +20,10 @@ namespace Zombie {
       
       Function(std::string name) : name(name) {}
       std::string name;
+      
+      // TODO:2014-11-04:alex:This is not DRY.
+      bool operator ==(const Function &other) const { return name == other.name; }
+      bool operator !=(const Function &other) const { return name != other.name; }
     };
   }
 }

@@ -40,3 +40,22 @@ TermSharedPtr OpAdd::simplify(TermSharedPtr &self) {
     operands[i] = operands[i]->simplify(operands[i]);
   return self->tidy(self);
 }
+
+const std::string OpAdd::latex(const latex_ctx_t &ctx) const {
+  std::ostringstream osP, osN;
+  
+  if(ctx.parentalPrecedence > kLP_ADD) osP << "(";
+  
+  for(auto it = operands.begin(); it != operands.end(); ++it) {
+    bool isNegative = (*it)->sign() == -1;
+    std::ostringstream &os = isNegative ? osN : osP;
+    if(!os.str().empty() || isNegative != ctx.negate)
+      os << (isNegative != ctx.negate ? "-" : "+");
+    os << (*it)->latex((latex_ctx_t){ kLP_ADD, isNegative });
+  }
+  
+  osP << osN.str();
+  
+  if(ctx.parentalPrecedence > kLP_ADD) osP << ")";
+  return osP.str();
+}

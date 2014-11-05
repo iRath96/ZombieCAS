@@ -47,13 +47,17 @@ TermSharedPtr Operation::tidy(TermSharedPtr &self) {
     operands.push_back(*it);
   }
   
+  // This comment serves no purpose.
+  
   Constant *result = new Constant(neutral);
   for(auto it = constants.begin(); it != constants.end(); ++it)
     if(isMultiply) *result *= *(Constant *)it->get();
     else *result += *(Constant *)it->get();
   
-  if(*result != neutral) operands.push_back(TermSharedPtr(result));
-  else delete result;
+  TermSharedPtr constResult = TermSharedPtr(result);
+  constResult = constResult->tidy(constResult);
+  
+  if(*result != neutral) operands.push_back(constResult);
   
   if(operands.size() == 0) return TermSharedPtr(new Constant(neutral));
   if(operands.size() == 1) return operands[0];

@@ -23,15 +23,12 @@ namespace Zombie {
       
       explicit operator double() { return n / d; }
       
-      Constant(double v) : n(v) {}
+      Constant(double n, unsigned long d = 1) : n(n), d(d) {}
       
       virtual TermSharedPtr deriveUntidy(const Variable &v) const { return TermSharedPtr(new Constant(0)); }
       Constant orderOf(const Term *) const;
       
-      virtual TermSharedPtr tidy(TermSharedPtr &self) {
-        // TODO:2014-10-18:alex:Important. Implement this.
-        return self;
-      }
+      TermSharedPtr tidy(TermSharedPtr &);
       
       Number calculate(const Arguments &) const { return n / d; }
       
@@ -46,10 +43,10 @@ namespace Zombie {
         return os.str();
       }
       
-      const std::string latex(const latex_ctx_t &) const {
+      const std::string latex(const latex_ctx_t &ctx) const {
         std::ostringstream os;
-        if(d == 1) os << n;
-        else os << "\frac{" << n << "}{" << d << "}";
+        if(d == 1) os << n * (ctx.negate ? -1 : +1);
+        else os << "\\frac{" << n * (ctx.negate ? -1 : +1) << "}{" << d << "}";
         return os.str();
       }
       
@@ -81,6 +78,7 @@ bool operator op(const Constant &other) const { return this->n * other.d op othe
         return *this;
       }
       
+      // TODO:2014-11-04:alex:This does not work! [ this->d ] is long and [ other.n ] is double!!
       Constant &operator /=(const Constant &other) {
         this->n *= other.d;
         this->d *= other.n;

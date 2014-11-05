@@ -28,9 +28,16 @@ TermSharedPtr OpPow::tidy(TermSharedPtr &self) {
   bool expConst  = dynamic_cast<Constant *>(operands[1].get()) != NULL;
   
   if(baseConst && expConst) {
-    double base = (double)(*(Constant *)operands[0].get());
+    Constant *base = (Constant *)operands[0].get();
     double exp = (double)(*(Constant *)operands[1].get());
-    TermSharedPtr c = TermSharedPtr(new Constant(::pow(base, exp)));
+    
+    Constant *co;
+    if(exp > 0)
+      co = new Constant(::pow(base->n, +exp), ::pow(base->d, +exp));
+    else
+      co = new Constant(::pow(base->d, -exp), ::pow(base->n, -exp));
+    
+    TermSharedPtr c = TermSharedPtr(co);
     // TODO:2014-10-18:alex:Check if the number is good.
     return c;
   }
@@ -88,6 +95,44 @@ TermSharedPtr OpPow::deriveUntidy(const Variable &var) const {
   }));
   
   return TermSharedPtr(mul);
+}
+
+TermSharedPtr OpPow::simplify(TermSharedPtr &self) {
+  // TODO:2014-11-04:alex:Horrendous code ahead.
+  
+  Constant *exp;
+  Invocation *inv;
+  
+  for(short i = 0; i < 2; ++i) operands[i] = operands[i]->simplify(operands[i]);
+  if(!dynamic_cast<Constant *>(operands[1].get())) goto giveUp;
+  
+  exp = (Constant *)operands[1].get();
+  if(*exp != 2) goto giveUp;
+  if(!dynamic_cast<Invocation *>(operands[0].get())) goto giveUp;
+  
+  inv = (Invocation *)operands[0].get();
+  if(inv->function->name == "sin") {
+    TermSharedPtr one = TermSharedPtr(new Constant(1));
+    TermSharedPtr two = TermSharedPtr(new Constant(2));
+    
+    TermSharedPtr arg = Term::multiply(inv->arguments[0], two);
+    TermSharedPtr newInv = TermSharedPtr(new Invocation(new Definitions::Function("cos"), TermVectorShared { arg })); // Not owned! Ouch!
+    
+    TermSharedPtr sum = Term::subtract(one, newInv);
+    return Term::divide(sum, two);
+  } else if(inv->function->name == "cos") {
+    TermSharedPtr one = TermSharedPtr(new Constant(1));
+    TermSharedPtr two = TermSharedPtr(new Constant(2));
+    
+    TermSharedPtr arg = Term::multiply(inv->arguments[0], two);
+    TermSharedPtr newInv = TermSharedPtr(new Invocation(inv->function, TermVectorShared { arg }));
+    
+    TermSharedPtr sum = Term::add(newInv, one);
+    return Term::divide(sum, two);
+  }
+  
+giveUp:
+  return tidy(self);
 }
 
 TermSharedPtr OpPow::expand(TermSharedPtr &self) {

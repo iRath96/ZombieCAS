@@ -76,6 +76,7 @@ Tokenizer::Tokenizer(std::string input) {
             // If this power follows a unary minus, however, it should bind stronger
             // than the unary minus ( 2^-a^2 => 2^(-(a^2)) )
             else
+              // TODO:2014-11-03:alex:The line below is wrong and you know it. (miscounted as invocation)
               memory->precedence = 7;
           }
           break;
@@ -91,7 +92,7 @@ Tokenizer::Tokenizer(std::string input) {
     tokens.push_back(memory);
     needsMul = memory->precedence == 0 || memory->text == ")";
     
-    canBeUnary = memory->text == "(" || memory->text == "^";
+    canBeUnary = memory->text == "(" || memory->text == "^" || memory->text == "*" || memory->text == "+";
     memory = NULL;
   }
 }
